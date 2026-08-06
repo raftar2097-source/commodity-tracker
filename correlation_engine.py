@@ -196,6 +196,13 @@ def trend_continuation_study(commodity_price: pd.Series, stock_price: pd.Series,
             if idx >= len(stock.index):
                 continue
             d_eff = stock.index[idx]
+            if (d_eff - d).days > 15:
+                # d predates this stock's listing (or a long trading halt) by
+                # more than a routine holiday gap -- using the earliest
+                # available price as a stand-in would fabricate a signal for
+                # a confirmation date the stock didn't exist for, rather than
+                # measuring one. Skip it instead.
+                continue
         else:
             d_eff = d
         loc = stock.index.get_loc(d_eff)
