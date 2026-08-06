@@ -60,3 +60,10 @@ jobs:
 
       - id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # Default is 10 minutes; observed the actual deployment complete
+          # successfully on GitHub's backend while this action's own status
+          # polling still timed out waiting to see it (happened 2/2 times).
+          # Longer timeout gives it room to observe the real result instead
+          # of reporting a false failure on a deploy that actually worked.
+          timeout: 1200000
