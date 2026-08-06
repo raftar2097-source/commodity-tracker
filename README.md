@@ -75,12 +75,12 @@ story but correlation that hasn't cleared significance yet is tagged
 
 ## Current validated universe
 
-| Commodity | Pairs | Notes |
-|---|---|---|
-| Brent Crude | OIL.NS, ONGC.NS (+), HPCL/BPCL/IOC.NS (-), ASIANPAINT.NS (-), INDIGO.NS (mixed) | Cleanest result -- signs match business logic almost exactly. OMCs behave like *consumers* (negative), not producers, due to India's regulated retail pricing / under-recovery dynamic. |
-| Copper | POLYCAB.NS, KEI.NS (+) | Signal lives in trend-continuation, not day-to-day correlation -- these are demand-cycle co-movers, not simple cost-passthrough. |
-| Silver | HINDZINC.NS (+) | Strongest single-pair correlation found (r=0.51, FDR-significant). |
-| Gold | MUTHOOTFIN.NS, MANAPPURAM.NS (+) vs KALYANKJIL.NS (-) | `tier: promising`. Coherent NBFC-vs-jeweller split but not yet statistically significant. |
+| Commodity | Validated | Promising | Notes |
+|---|---|---|---|
+| Brent Crude | OIL.NS, ONGC.NS (+), HPCL/BPCL.NS (-), ASIANPAINT.NS (-), INDIGO.NS (mixed) | IOC.NS, PIDILITIND.NS (-) | Cleanest result -- signs match business logic almost exactly. OMCs behave like *consumers* (negative), not producers, due to India's regulated retail pricing / under-recovery dynamic. IOC was validated at n=8 candidates, dropped to promising once FDR correction tightened at n=17. |
+| Copper | POLYCAB.NS, KEI.NS, APARINDS.NS (+) | HAVELLS.NS (+) | Signal lives in trend-continuation, not day-to-day correlation -- these are demand-cycle co-movers, not simple cost-passthrough. |
+| Silver | HINDZINC.NS (+) | -- | Strongest correlation found (r=0.51), though FDR significance is now marginal (p_adj=0.063) after testing against a larger candidate batch -- kept validated on overall strength of evidence. |
+| Gold | -- | MUTHOOTFIN.NS, MANAPPURAM.NS (+) vs KALYANKJIL.NS (-) | Not yet statistically significant. Expanding candidates revealed jewellers aren't a uniform category -- Thangamayil and Senco Gold show *positive* trend-continuation, contradicting Kalyan Jewellers' negative pattern. Treat the jeweller-side story as unresolved. |
 
 **Explicitly not included** (tested, no validated pair found -- see
 `validated_pairs.json`'s `_not_included` section for the reasoning):

@@ -11,10 +11,12 @@
        "backtest": {"idio_correlation_r": -0.43, "fdr_significant": true}},
       {"ticker": "BPCL.NS", "name": "BPCL", "role": "OMC (under-recovery risk on rising crude)", "expected_direction": "negative", "tier": "validated",
        "backtest": {"idio_correlation_r": -0.35, "fdr_significant": true}},
-      {"ticker": "IOC.NS", "name": "Indian Oil Corp", "role": "OMC (under-recovery risk on rising crude)", "expected_direction": "negative", "tier": "validated",
-       "backtest": {"idio_correlation_r": -0.34, "fdr_significant": true}},
+      {"ticker": "IOC.NS", "name": "Indian Oil Corp", "role": "OMC (under-recovery risk on rising crude)", "expected_direction": "negative", "tier": "promising",
+       "backtest": {"idio_correlation_r": -0.34, "fdr_significant": false, "p_adj": 0.091, "note": "was FDR-significant (p_adj=0.048) when tested against 8 candidates; dropped just below the bar (p_adj=0.091) once the batch grew to 17 -- the FDR correction gets stricter as more stocks are tested. Same underlying number, more honest significance test. Downgraded from validated for consistency."}},
       {"ticker": "ASIANPAINT.NS", "name": "Asian Paints", "role": "consumer (crude-derivative input cost)", "expected_direction": "negative", "tier": "validated",
        "backtest": {"idio_correlation_r": -0.32, "fdr_significant": true}},
+      {"ticker": "PIDILITIND.NS", "name": "Pidilite Industries", "role": "consumer (adhesives, petrochemical input cost)", "expected_direction": "negative", "tier": "promising",
+       "backtest": {"idio_correlation_r": -0.39, "fdr_significant": false, "p_adj": 0.091, "trend_90d_excess_median_pct": 0.28, "note": "correct sign, close to significance, but weak trend-continuation backing -- not as strong a case as Asian Paints"}},
       {"ticker": "INDIGO.NS", "name": "IndiGo", "role": "consumer (jet fuel cost) -- short/medium horizon signs diverge", "expected_direction": "negative_shortterm", "tier": "validated_mixed",
        "backtest": {"idio_correlation_r": -0.51, "fdr_significant": true, "trend_90d_excess_median_pct": 11.94, "note": "reacts negatively same-day but shows positive 90d trend-continuation -- treat as two separate signals, not one"}}
     ]
@@ -26,7 +28,11 @@
       {"ticker": "POLYCAB.NS", "name": "Polycab India", "role": "cable/wire manufacturer -- demand co-mover, not simple cost-consumer", "expected_direction": "positive", "tier": "validated",
        "backtest": {"trend_90d_excess_median_pct": 21.70, "trend_90d_hit_rate": 0.70, "note": "raw idio correlation weak/non-significant; the real signal is in trend-continuation, confirmed after stripping market beta from forward returns"}},
       {"ticker": "KEI.NS", "name": "KEI Industries", "role": "cable/wire manufacturer -- demand co-mover", "expected_direction": "positive", "tier": "validated",
-       "backtest": {"trend_90d_excess_median_pct": 21.09, "trend_90d_hit_rate": 0.50}}
+       "backtest": {"trend_90d_excess_median_pct": 21.09, "trend_90d_hit_rate": 0.50}},
+      {"ticker": "APARINDS.NS", "name": "Apar Industries", "role": "cable/conductor manufacturer -- demand co-mover", "expected_direction": "positive", "tier": "validated",
+       "backtest": {"trend_90d_excess_median_pct": 14.27, "trend_90d_hit_rate": 0.50, "note": "same profile as KEI: correlation not significant, real signal is in trend-continuation"}},
+      {"ticker": "HAVELLS.NS", "name": "Havells India", "role": "electrical equipment -- partial demand co-mover", "expected_direction": "positive", "tier": "promising",
+       "backtest": {"trend_90d_excess_median_pct": 14.53, "trend_90d_hit_rate": 0.40, "note": "decent median but weaker hit rate than Polycab/KEI/Apar; more diversified business than a pure cable/wire maker"}}
     ]
   },
   "SI=F": {
@@ -34,7 +40,7 @@
     "market": "^NSEI",
     "pairs": [
       {"ticker": "HINDZINC.NS", "name": "Hindustan Zinc", "role": "producer (silver byproduct of zinc/lead mining)", "expected_direction": "positive", "tier": "validated",
-       "backtest": {"idio_correlation_r": 0.51, "fdr_significant": true, "trend_90d_excess_median_pct": 12.36, "trend_90d_hit_rate": 0.45}}
+       "backtest": {"idio_correlation_r": 0.51, "fdr_significant": false, "p_adj": 0.063, "trend_90d_excess_median_pct": 12.36, "trend_90d_hit_rate": 0.45, "note": "p_adj loosened from 0.022 to 0.063 once tested against 6 candidates instead of 2 (stricter FDR correction with more tests) -- still by far the strongest correlation found in this whole project, kept as validated on the strength of magnitude + stability + trend-continuation agreement, but the exact significance claim should be read as marginal, not clean, going forward."}}
     ]
   },
   "GC=F": {
@@ -46,13 +52,14 @@
       {"ticker": "MANAPPURAM.NS", "name": "Manappuram Finance", "role": "gold-loan NBFC (collateral value tailwind)", "expected_direction": "positive", "tier": "promising",
        "backtest": {"idio_correlation_r": 0.19, "fdr_significant": false, "trend_90d_excess_median_pct": 12.84, "trend_90d_hit_rate": 0.42}},
       {"ticker": "KALYANKJIL.NS", "name": "Kalyan Jewellers", "role": "jewellery retail (demand elasticity headwind)", "expected_direction": "negative", "tier": "promising",
-       "backtest": {"idio_correlation_r": 0.11, "fdr_significant": false, "trend_90d_excess_median_pct": -12.07, "note": "short history since 2021 IPO, fewer data points than other pairs"}}
+       "backtest": {"idio_correlation_r": 0.11, "fdr_significant": false, "trend_90d_excess_median_pct": -12.07, "note": "short history since 2021 IPO, fewer data points than other pairs. IMPORTANT: expanding the candidate list showed 'jeweller' is not a uniform-direction category -- Thangamayil Jewellery (+17.1% median, 50% hit) and Senco Gold (+8.1% median, 42% hit) both show POSITIVE trend-continuation, contradicting this negative pattern. Not added to this file since the contradiction is unresolved, but the clean 'NBFC positive / jeweller negative' story should be treated as provisional, not settled -- possibly a regional/scale effect (smaller, expansion-stage jewellers vs. large national retailers) rather than a uniform commodity-cost effect. Needs more investigation before trusting either direction strongly."}}
     ]
   },
   "_not_included": {
     "note": "Commodities tested but not added to the live scan universe -- either no validated pair was found, or the global benchmark used was found to be the wrong proxy for the Indian equity side.",
     "SB=F_sugar": "No FDR-significant correlation found for any candidate against global ICE sugar futures. Trend-continuation was uniformly negative even after market-beta correction, likely because Indian sugar equities are driven by domestic policy (FRP/SAP cane pricing, ethanol mandates, export quotas) rather than the global benchmark. Needs a domestic Indian sugar price series (NCDEX/Agmarknet) to retest properly.",
     "ALI=F_aluminium": "No candidate cleared FDR significance. One trend-continuation number (NATIONALUM.NS) looked attractive but had no correlation backing and rests on ~13-15 non-independent events -- treated as noise, not a validated signal.",
-    "TIO=F_iron_ore": "No candidate cleared FDR significance. Iron ore/steel is more plausibly driven by China demand and domestic capacity cycles than this specific (thinly-traded) Singapore Exchange contract. Needs a China-demand-linked or domestic steel price series to retest properly."
+    "TIO=F_iron_ore": "No candidate cleared FDR significance. Iron ore/steel is more plausibly driven by China demand and domestic capacity cycles than this specific (thinly-traded) Singapore Exchange contract. Needs a China-demand-linked or domestic steel price series to retest properly.",
+    "candidates_excluded_for_data_quality": "RRKABEL.NS (copper) and PREMIERENE.NS / WAAREEENER.NS (silver) all showed eye-catching trend-continuation numbers (RRKABEL +11.2%, PREMIERENE +39.2% median with a 64% hit rate) but were excluded: all three IPO'd within the last 1-3 years, so most of the historical 'trend confirmation' dates in the backtest predate their stock existing. The backtest silently substitutes each stock's earliest available price as a stand-in entry point for confirmation dates that occurred before listing, which manufactures a spurious signal rather than measuring a real one -- visible in RRKABEL's low 10% hit rate despite a decent-looking median. Do not re-add these without either much more post-IPO history or a fix to the backtest that skips confirmation dates predating a stock's listing instead of substituting the earliest available price."
   }
 }
