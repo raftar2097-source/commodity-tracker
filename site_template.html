@@ -22,6 +22,7 @@
     --bear-bg: #AD3B3B14;
     --neutral: #96771F;
     --neutral-bg: #96771F14;
+    --series-stock: #eb6834;
     --shadow: 0 1px 2px rgba(20, 24, 22, 0.06), 0 4px 14px rgba(20, 24, 22, 0.05);
   }
   @media (prefers-color-scheme: dark) {
@@ -31,6 +32,7 @@
       --rule: #2A3138; --rule-strong: #3A434B; --accent: #8CA2EE; --accent-soft: #8CA2EE1A;
       --bull: #5CB584; --bull-bg: #5CB58420; --bear: #E08080; --bear-bg: #E0808020;
       --neutral: #D6B463; --neutral-bg: #D6B46320;
+      --series-stock: #d95926;
       --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
     }
   }
@@ -155,6 +157,65 @@
   }
   .sig-note { font-size: 11.5px; color: var(--ink-soft); font-style: italic; margin-top: 4px; }
 
+  /* track record: charts + historical instances */
+  .track-commodity { margin-bottom: 20px; }
+  .track-commodity h3 {
+    font-family: ui-serif, Georgia, "Iowan Old Style", serif; font-size: 17px; font-weight: 600;
+    margin: 0 0 10px; display: flex; align-items: baseline; gap: 8px;
+  }
+  .track-pair {
+    background: var(--surface-raised); border: 1px solid var(--rule); border-radius: 8px;
+    box-shadow: var(--shadow); margin-bottom: 10px; overflow: hidden;
+  }
+  .track-pair > summary {
+    list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    padding: 12px 16px; user-select: none;
+  }
+  .track-pair > summary::-webkit-details-marker { display: none; }
+  .track-pair > summary::before {
+    content: "▸"; color: var(--ink-faint); font-size: 12px; transition: transform 0.15s ease;
+  }
+  .track-pair[open] > summary::before { transform: rotate(90deg); }
+  .track-hit-summary {
+    margin-left: auto; font-size: 11.5px; color: var(--ink-faint);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  .track-body { padding: 4px 16px 16px; }
+  .chart-legend { display: flex; gap: 16px; margin-bottom: 6px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-soft); }
+  .legend-swatch { width: 12px; height: 2px; border-radius: 1px; display: inline-block; }
+  .legend-swatch.chart-commodity { background: var(--accent); }
+  .legend-swatch.chart-stock { background: var(--series-stock); }
+
+  .track-chart { width: 100%; height: auto; display: block; }
+  .chart-baseline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 3; }
+  .chart-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .chart-line.chart-commodity { stroke: var(--accent); }
+  .chart-line.chart-stock { stroke: var(--series-stock); }
+  .chart-end-label {
+    font-size: 11px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-weight: 600;
+  }
+  .chart-end-label.chart-commodity { fill: var(--accent); }
+  .chart-end-label.chart-stock { fill: var(--series-stock); }
+  .chart-date-label { font-size: 10px; fill: var(--ink-faint); }
+  .instance-marker {
+    stroke: var(--surface-raised); stroke-width: 2; cursor: pointer;
+  }
+  .instance-marker.hit { fill: var(--bull); }
+  .instance-marker.miss { fill: var(--bear); }
+
+  .instances-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12.5px; }
+  .instances-table th {
+    text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--ink-faint); font-weight: 600; padding: 5px 8px; border-bottom: 1px solid var(--rule);
+  }
+  .instances-table td {
+    padding: 5px 8px; border-bottom: 1px solid var(--rule); font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  .instances-table td.num { font-variant-numeric: tabular-nums; }
+  .instance-result.hit { color: var(--bull); }
+  .instance-result.miss { color: var(--bear); }
+
   .empty-state {
     padding: 40px; text-align: center; color: var(--ink-faint);
     border: 1px dashed var(--rule-strong); border-radius: 8px;
@@ -201,6 +262,9 @@
   <div class="section-label">History</div>
   {{HISTORY}}
 
+  <div class="section-label">Track record</div>
+  {{TRACK_RECORD}}
+
   <p class="colophon">
     Auto-generated from data/*.json after every daily scan. A "signal" fires
     when a commodity has either a same-day reaction event (a large move
@@ -209,7 +273,13 @@
     historical backtest, whose stats are shown under each linked stock.
     "Validated" pairs cleared market-beta-adjusted correlation, multi-window
     stability, and FDR significance; "promising" pairs have a fundamentally
-    coherent story but haven't cleared statistical significance yet.
+    coherent story but haven't cleared statistical significance yet. The
+    track record charts below index both prices to 100 at the start of the
+    window so they're comparable on one axis regardless of currency or
+    scale; each dot marks a historical trend-confirmation date, colored by
+    whether the stock's 90-day excess return over the Nifty went on to hit
+    the 15% target (hover a dot, or see the table under each chart, for the
+    exact numbers).
   </p>
 </div>
 </body>

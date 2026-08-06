@@ -174,7 +174,7 @@ def trend_continuation_study(commodity_price: pd.Series, stock_price: pd.Series,
                               market_price: pd.Series,
                               trend_window=60, min_return=0.10, max_drawdown=0.05,
                               persist_days=10, forward_horizons=(30, 60, 90),
-                              late_capture_pct=0.15):
+                              late_capture_pct=0.15, expected_direction="positive"):
     """Forward returns are reported both raw AND as excess-over-market
     (stock forward return minus the market's forward return over the same
     horizon). Raw return answers 'did the stock go up'; excess return
@@ -182,7 +182,15 @@ def trend_continuation_study(commodity_price: pd.Series, stock_price: pd.Series,
     because the whole market was rallying at the same time' -- the latter
     is the one that should drive the ranking, since a stock that merely
     tracks a broad bull market alongside the commodity isn't a real
-    commodity-linked position."""
+    commodity-linked position.
+
+    `expected_direction` controls what counts as 'reached_target': for a
+    producer we expect to rise (excess_return >= +late_capture_pct); for a
+    consumer we expect to fall on a commodity uptrend, so the target is
+    excess_return <= -late_capture_pct instead. Getting this backwards
+    silently mislabels every negative-direction pair's hits as misses and
+    vice versa -- pass the pair's actual expected direction, don't rely on
+    the 'positive' default outside of quick exploratory calls."""
     confirmations = detect_trend_confirmations(
         commodity_price, trend_window, min_return, max_drawdown, persist_days)
 
@@ -223,12 +231,16 @@ def trend_continuation_study(commodity_price: pd.Series, stock_price: pd.Series,
             m_fwd_return = m_fwd_price / m_entry_price - 1
 
             excess_return = fwd_return - m_fwd_return
+            if expected_direction == "positive":
+                reached_target = excess_return >= late_capture_pct
+            else:
+                reached_target = excess_return <= -late_capture_pct
             results_by_horizon[h].append({
                 "confirmation_date": d.date().isoformat(),
                 "forward_return_pct": round(float(fwd_return) * 100, 2),
                 "market_return_pct": round(float(m_fwd_return) * 100, 2),
                 "excess_return_pct": round(float(excess_return) * 100, 2),
-                "reached_target": bool(excess_return >= late_capture_pct),
+                "reached_target": bool(reached_target),
             })
 
     summary = {}

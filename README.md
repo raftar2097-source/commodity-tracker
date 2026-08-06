@@ -94,12 +94,22 @@ domestic price series instead of the thin Singapore contract used here).
 correlation_engine.py    the backtest engine (correlation, reaction, trend-continuation)
 validated_pairs.json     curated output of the backtest -- what daily_scan.py reads
 daily_scan.py             daily entrypoint: checks today's data, writes data/<date>.json
-build_site.py             renders data/*.json into docs/index.html
+build_chart_data.py       generates docs/chart_data.json (indexed price series + historical
+                           trend-confirmation instances per pair) -- run by hand after
+                           validated_pairs.json changes, not part of the daily job
+build_site.py             renders data/*.json + chart_data.json into docs/index.html
 site_template.html        the HTML/CSS shell build_site.py fills in
 data/                     one JSON file per day the scan has run (generated)
 docs/                     generated static site, served by GitHub Pages
 .github/workflows/daily.yml   the scheduled job (scan -> build site -> commit both)
 requirements.txt
+```
+
+After changing validated_pairs.json (adding/removing a pair, or changing a
+`trend_direction` override), regenerate the charts before rebuilding the site:
+
+```bash
+python3 build_chart_data.py && python3 build_site.py
 ```
 
 ## Running manually
