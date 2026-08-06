@@ -271,6 +271,10 @@ def render_track_record(config, chart_data):
 
 def main():
     os.makedirs(DOCS_DIR, exist_ok=True)
+    # Tells GitHub Pages to serve docs/ as-is instead of running it through
+    # Jekyll (the legacy Pages build) -- without this, Jekyll processing the
+    # large generated chart_data.json can fail the page build outright.
+    open(os.path.join(DOCS_DIR, ".nojekyll"), "a").close()
     reports = load_reports()
 
     total_days = len(reports)
