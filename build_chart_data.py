@@ -12,12 +12,18 @@ from pathlib import Path
 
 import pandas as pd
 
-from correlation_engine import fetch_prices, trend_continuation_study
+from correlation_engine import fetch_prices, trend_continuation_study, load_domestic_sugar_wholesale_price
 
 CONFIG_PATH = Path(__file__).parent / "validated_pairs.json"
 OUT_PATH = Path(__file__).parent / "docs" / "chart_data.json"
 START = "2018-01-01"
 MAX_POINTS = 420  # downsample target for the plotted line, instances stay exact
+
+# Commodities with no yfinance ticker -- loaded from a custom source instead
+# of the batch fetch_prices() call below.
+CUSTOM_PRICE_LOADERS = {
+    "DOMESTIC_SUGAR_WHOLESALE": load_domestic_sugar_wholesale_price,
+}
 
 
 def downsample(dates, values, max_points):
@@ -76,10 +82,16 @@ def main():
         for pair in spec["pairs"]:
             all_tickers.add(pair["ticker"])
     for commodity_ticker in config:
-        all_tickers.add(commodity_ticker)
+        if commodity_ticker not in CUSTOM_PRICE_LOADERS:
+            all_tickers.add(commodity_ticker)
 
     print(f"Fetching prices for {len(all_tickers)} tickers since {START}...")
     prices = fetch_prices(sorted(all_tickers), start=START)
+
+    for commodity_ticker, loader in CUSTOM_PRICE_LOADERS.items():
+        if commodity_ticker in config:
+            print(f"  loading custom price source for {commodity_ticker}...")
+            prices[commodity_ticker] = loader()
 
     chart_data = {}
     for commodity_ticker, spec in config.items():

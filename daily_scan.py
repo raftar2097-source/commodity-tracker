@@ -20,10 +20,16 @@ from datetime import date
 
 import pandas as pd
 
-from correlation_engine import fetch_prices, current_status
+from correlation_engine import fetch_prices, current_status, load_domestic_sugar_wholesale_price
 
 CONFIG_PATH = Path(__file__).parent / "validated_pairs.json"
 DATA_DIR = Path(__file__).parent / "data"
+
+# Commodities with no yfinance ticker -- current_status() needs an actual
+# price series for these, loaded via a custom source instead of fetch_prices().
+CUSTOM_PRICE_LOADERS = {
+    "DOMESTIC_SUGAR_WHOLESALE": load_domestic_sugar_wholesale_price,
+}
 
 
 def load_config():
@@ -33,15 +39,25 @@ def load_config():
     return config
 
 
+def refresh_custom_sources(config):
+    if "DOMESTIC_SUGAR_WHOLESALE" in config:
+        import scrape_domestic_sugar
+        scrape_domestic_sugar.main()
+
+
 def run_scan(lookback_days=400):
     config = load_config()
+    refresh_custom_sources(config)
     start = (pd.Timestamp.today() - pd.Timedelta(days=lookback_days)).strftime("%Y-%m-%d")
 
     report = {"run_date": date.today().isoformat(), "commodities": {}}
 
     for commodity_ticker, spec in config.items():
-        prices = fetch_prices([commodity_ticker], start=start)
-        status = current_status(prices[commodity_ticker])
+        if commodity_ticker in CUSTOM_PRICE_LOADERS:
+            commodity_price = CUSTOM_PRICE_LOADERS[commodity_ticker]()
+        else:
+            commodity_price = fetch_prices([commodity_ticker], start=start)[commodity_ticker]
+        status = current_status(commodity_price)
 
         entry = {"name": spec["name"], "status": status, "signals": []}
 

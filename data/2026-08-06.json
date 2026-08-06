@@ -5,12 +5,12 @@
       "name": "Brent Crude",
       "status": {
         "date": "2026-08-06",
-        "latest_price": 79.62000274658203,
-        "latest_return_pct": 0.21,
-        "z_score": 0.06,
+        "latest_price": 80.41999816894531,
+        "latest_return_pct": 1.21,
+        "z_score": 0.34,
         "event_today": false,
-        "trend_cum_return_pct": -23.6,
-        "trend_drawdown_pct": 28.97,
+        "trend_cum_return_pct": -22.83,
+        "trend_drawdown_pct": 28.26,
         "in_confirmed_trend": false
       },
       "signals": []
@@ -19,11 +19,11 @@
       "name": "Copper",
       "status": {
         "date": "2026-08-06",
-        "latest_price": 6.78849983215332,
-        "latest_return_pct": 1.27,
-        "z_score": 0.74,
+        "latest_price": 6.7804999351501465,
+        "latest_return_pct": 1.15,
+        "z_score": 0.68,
         "event_today": false,
-        "trend_cum_return_pct": 5.85,
+        "trend_cum_return_pct": 5.72,
         "trend_drawdown_pct": 0.0,
         "in_confirmed_trend": false
       },
@@ -33,12 +33,12 @@
       "name": "Silver",
       "status": {
         "date": "2026-08-06",
-        "latest_price": 62.23500061035156,
-        "latest_return_pct": 0.22,
-        "z_score": 0.07,
+        "latest_price": 61.93000030517578,
+        "latest_return_pct": -0.27,
+        "z_score": -0.09,
         "event_today": false,
-        "trend_cum_return_pct": -27.2,
-        "trend_drawdown_pct": 29.98,
+        "trend_cum_return_pct": -27.55,
+        "trend_drawdown_pct": 30.33,
         "in_confirmed_trend": false
       },
       "signals": []
@@ -47,15 +47,115 @@
       "name": "Gold",
       "status": {
         "date": "2026-08-06",
-        "latest_price": 4341.60009765625,
-        "latest_return_pct": 2.23,
-        "z_score": 1.4,
+        "latest_price": 4316.7998046875,
+        "latest_return_pct": 1.66,
+        "z_score": 1.05,
         "event_today": false,
-        "trend_cum_return_pct": -7.99,
-        "trend_drawdown_pct": 7.58,
+        "trend_cum_return_pct": -8.52,
+        "trend_drawdown_pct": 8.11,
         "in_confirmed_trend": false
       },
       "signals": []
+    },
+    "DOMESTIC_SUGAR_WHOLESALE": {
+      "name": "Domestic Sugar (Wholesale, Chinimandi)",
+      "status": {
+        "date": "2026-08-06",
+        "latest_price": 5135.555555555556,
+        "latest_return_pct": 0.17,
+        "z_score": 0.36,
+        "event_today": false,
+        "trend_cum_return_pct": 17.16,
+        "trend_drawdown_pct": 0.0,
+        "in_confirmed_trend": true
+      },
+      "signals": [
+        {
+          "ticker": "TRIVENI.NS",
+          "name": "Triveni Engineering",
+          "role": "sugar producer (wholesale-price-linked)",
+          "expected_direction": "positive",
+          "tier": "promising",
+          "backtest": {
+            "idio_correlation_r": 0.248,
+            "fdr_significant": false,
+            "note": "best correlation of any sugar candidate tested (global or domestic) across this whole project. Trend-continuation has only n=2 usable historical episodes (2018-07-15, 2025-03-03; a 3rd confirmed 2026-07-27 but is too recent for forward-return data) -- too thin to trust magnitudes, but every one of the 6 positive-direction sugar stocks agreed on direction across both episodes, which is the more meaningful signal than any single stock's number."
+          },
+          "triggered_by": [
+            "trend_continuation"
+          ]
+        },
+        {
+          "ticker": "RENUKA.NS",
+          "name": "Shree Renuka Sugars",
+          "role": "sugar producer (wholesale-price-linked)",
+          "expected_direction": "positive",
+          "tier": "promising",
+          "backtest": {
+            "idio_correlation_r": 0.156,
+            "fdr_significant": false
+          },
+          "triggered_by": [
+            "trend_continuation"
+          ]
+        },
+        {
+          "ticker": "BALRAMCHIN.NS",
+          "name": "Balrampur Chini Mills",
+          "role": "sugar producer (wholesale-price-linked)",
+          "expected_direction": "positive",
+          "tier": "promising",
+          "backtest": {
+            "idio_correlation_r": 0.151,
+            "fdr_significant": false
+          },
+          "triggered_by": [
+            "trend_continuation"
+          ]
+        },
+        {
+          "ticker": "DHAMPURSUG.NS",
+          "name": "Dhampur Sugar Mills",
+          "role": "sugar producer (wholesale-price-linked)",
+          "expected_direction": "positive",
+          "tier": "promising",
+          "backtest": {
+            "idio_correlation_r": 0.15,
+            "fdr_significant": false
+          },
+          "triggered_by": [
+            "trend_continuation"
+          ]
+        },
+        {
+          "ticker": "UTTAMSUGAR.NS",
+          "name": "Uttam Sugar Mills",
+          "role": "sugar producer (wholesale-price-linked)",
+          "expected_direction": "positive",
+          "tier": "promising",
+          "backtest": {
+            "idio_correlation_r": 0.146,
+            "fdr_significant": false
+          },
+          "triggered_by": [
+            "trend_continuation"
+          ]
+        },
+        {
+          "ticker": "DWARKESH.NS",
+          "name": "Dwarikesh Sugar Industries",
+          "role": "sugar producer (wholesale-price-linked)",
+          "expected_direction": "positive",
+          "tier": "promising",
+          "backtest": {
+            "idio_correlation_r": 0.109,
+            "fdr_significant": false
+          },
+          "triggered_by": [
+            "trend_continuation"
+          ]
+        }
+      ]
     }
   }
 }

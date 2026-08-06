@@ -38,6 +38,58 @@ def log_returns(price_df):
     return np.log(price_df / price_df.shift(1)).dropna(how="all")
 
 
+def load_domestic_sugar_price(csv_path="data_sources/chinimandi_retail_sugar_prices.csv"):
+    """Daily domestic retail sugar price (M-30, GST-inclusive), averaged
+    across 9 Indian cities (Delhi, Kanpur, Raipur, Mumbai, Ranchi, Kolkata,
+    Guwahati, Hyderabad, Chennai). Source: chinimandi.com/retail-prices,
+    pulled 2026-08-06 via the page's own DataTable (no public API; the
+    page renders the full 1,237-row history client-side, retrieved by
+    driving the DataTable's JS to load all rows then exporting a CSV).
+    Covers 2022-04-05 onward -- ~4.3 years, shorter than the 8-year window
+    used for other commodities, but a real domestic (not global-benchmark)
+    price series, which is what sugar specifically needed."""
+    df = pd.read_csv(csv_path)
+    df["Date"] = pd.to_datetime(df["Date"], format="%d/%m/%Y")
+    city_cols = [c for c in df.columns if c != "Date"]
+    for c in city_cols:
+        df[c] = pd.to_numeric(df[c], errors="coerce")  # "NR" (not reported) -> NaN
+    df["avg_price"] = df[city_cols].mean(axis=1, skipna=True)
+    series = df.set_index("Date")["avg_price"].sort_index()
+    return series
+
+
+def load_domestic_sugar_wholesale_price(csv_path="data_sources/chinimandi_wholesale_sugar_prices.csv"):
+    """Daily domestic wholesale/ex-mill sugar price (M-30, GST-inclusive,
+    per quintal), averaged across the same 9 cities as the retail series.
+    Same source and extraction method as load_domestic_sugar_price(), but
+    covers 2021-07-09 onward (~5 years) and is far more volatile -- retail
+    prices are administratively smoothed (buffer stock policy, MSP-driven),
+    wholesale/ex-mill prices are closer to a real market price. Source data
+    has ~2.9x duplicate rows per date (exact repeats, a publishing artifact
+    on chinimandi's end, not a multi-session quote), inconsistent date
+    zero-padding (e.g. '31/1/2026' vs '06/08/2026'), and at least one
+    repeated header row embedded mid-file (the source data appears to be
+    two backend date-range chunks concatenated, each with its own header)
+    Also has scattered malformed date strings (e.g. a missing '/' separator)
+    that no single strptime format handles -- parsed with errors='coerce'
+    and dropped rather than patched one-by-one, since new malformed rows
+    could appear in any future re-pull."""
+    df = pd.read_csv(csv_path)
+    df = df[df["Date"] != "Date"]
+    parsed_dates = pd.to_datetime(df["Date"], format="mixed", dayfirst=True, errors="coerce")
+    n_bad = parsed_dates.isna().sum()
+    if n_bad:
+        print(f"load_domestic_sugar_wholesale_price: dropping {n_bad} rows with unparseable dates")
+    df = df.assign(Date=parsed_dates).dropna(subset=["Date"])
+    df = df.drop_duplicates()
+    city_cols = [c for c in df.columns if c != "Date"]
+    for c in city_cols:
+        df[c] = pd.to_numeric(df[c], errors="coerce")  # "NR" (not reported) -> NaN
+    df["avg_price"] = df[city_cols].mean(axis=1, skipna=True)
+    series = df.groupby("Date")["avg_price"].mean().sort_index()
+    return series
+
+
 # ----------------------------------------------------------------------
 # 2. Market-beta stripping
 # ----------------------------------------------------------------------
@@ -269,13 +321,25 @@ def trend_continuation_study(commodity_price: pd.Series, stock_price: pd.Series,
 # ----------------------------------------------------------------------
 
 def analyze_commodity(commodity_ticker, stock_tickers, market_ticker="SPY",
-                       start="2018-01-01"):
-    all_tickers = [commodity_ticker] + stock_tickers + [market_ticker]
-    prices = fetch_prices(all_tickers, start=start)
-    returns = log_returns(prices)
+                       start="2018-01-01", commodity_price=None):
+    """commodity_price: optional pre-built pd.Series (DatetimeIndex -> price)
+    for commodities with no tradeable futures ticker -- e.g. a domestic
+    price series scraped/loaded from a non-yfinance source. When given,
+    commodity_ticker is used only as a label; stock/market prices are still
+    fetched normally and aligned against the supplied series via the same
+    inner-join logic every sub-function already uses."""
+    stock_prices = fetch_prices(stock_tickers + [market_ticker], start=start)
+    stock_returns = log_returns(stock_prices)
+    market_r = stock_returns[market_ticker]
 
-    commodity_r = returns[commodity_ticker]
-    market_r = returns[market_ticker]
+    if commodity_price is not None:
+        commodity_price_full = commodity_price[commodity_price.index >= pd.Timestamp(start)]
+        commodity_r = log_returns(commodity_price_full.to_frame("c"))["c"]
+    else:
+        commodity_price_full = fetch_prices([commodity_ticker], start=start)[commodity_ticker]
+        commodity_r = stock_returns[commodity_ticker] if commodity_ticker in stock_returns.columns \
+            else log_returns(commodity_price_full.to_frame("c"))["c"]
+
     commodity_resid = strip_market_beta(commodity_r, market_r)
 
     pair_stats = {}
@@ -283,7 +347,7 @@ def analyze_commodity(commodity_ticker, stock_tickers, market_ticker="SPY",
     trend_results = {}
 
     for stock in stock_tickers:
-        stock_r = returns[stock]
+        stock_r = stock_returns[stock]
         stock_resid = strip_market_beta(stock_r, market_r)
 
         window_corrs = multi_window_correlation(commodity_resid, stock_resid)
@@ -292,7 +356,7 @@ def analyze_commodity(commodity_ticker, stock_tickers, market_ticker="SPY",
 
         reaction_results[stock] = reaction_study(commodity_r, stock_r)
         trend_results[stock] = trend_continuation_study(
-            prices[commodity_ticker], prices[stock], prices[market_ticker])
+            commodity_price_full, stock_prices[stock], stock_prices[market_ticker])
 
     pair_stats = fdr_filter(pair_stats)
 

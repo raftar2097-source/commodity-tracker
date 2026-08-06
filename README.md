@@ -81,12 +81,19 @@ story but correlation that hasn't cleared significance yet is tagged
 | Copper | POLYCAB.NS, KEI.NS, APARINDS.NS (+) | HAVELLS.NS (+) | Signal lives in trend-continuation, not day-to-day correlation -- these are demand-cycle co-movers, not simple cost-passthrough. |
 | Silver | HINDZINC.NS (+) | -- | Strongest correlation found (r=0.51), though FDR significance is now marginal (p_adj=0.063) after testing against a larger candidate batch -- kept validated on overall strength of evidence. |
 | Gold | -- | MUTHOOTFIN.NS, MANAPPURAM.NS (+) vs KALYANKJIL.NS (-) | Not yet statistically significant. Expanding candidates revealed jewellers aren't a uniform category -- Thangamayil and Senco Gold show *positive* trend-continuation, contradicting Kalyan Jewellers' negative pattern. Treat the jeweller-side story as unresolved. |
+| Domestic Sugar (wholesale) | -- | TRIVENI.NS, RENUKA.NS, BALRAMCHIN.NS, DHAMPURSUG.NS, UTTAMSUGAR.NS, DWARKESH.NS (+, all promising) | The one commodity here with **no yfinance ticker** -- global ICE sugar futures were confirmed to be the wrong proxy (see below), so this uses a real domestic wholesale price series scraped from chinimandi.com instead. 6/7 candidates positive and sign-consistent (best r=0.248), but trend-continuation only has 2 usable historical episodes in 8.5 years of data -- genuinely promising, not enough events to fully validate. |
 
 **Explicitly not included** (tested, no validated pair found -- see
-`validated_pairs.json`'s `_not_included` section for the reasoning):
-Sugar (global ICE benchmark is the wrong proxy for India's policy-driven
-sugar economics), Aluminium, Iron ore (needs a China-demand-linked or
-domestic price series instead of the thin Singapore contract used here).
+`validated_pairs.json`'s `_not_included` section for the full reasoning):
+Aluminium, Iron ore (needs a China-demand-linked or domestic price series
+instead of the thin Singapore contract used here), Natural gas (Henry Hub
+is a US domestic benchmark, not what India's LNG imports actually track),
+Palm oil (tested against a genuine global benchmark, still no signal --
+plausibly because India actively manages edible oil import duties to
+smooth domestic prices). Domestic sugar *retail* prices (as opposed to
+wholesale, above) were also tested and rejected -- administratively
+smoothed to the point of having almost no usable trend-continuation
+events even after recalibrating for their much lower volatility.
 
 ## Repo layout
 
@@ -94,6 +101,11 @@ domestic price series instead of the thin Singapore contract used here).
 correlation_engine.py    the backtest engine (correlation, reaction, trend-continuation)
 validated_pairs.json     curated output of the backtest -- what daily_scan.py reads
 daily_scan.py             daily entrypoint: checks today's data, writes data/<date>.json
+scrape_domestic_sugar.py  Playwright scraper: refreshes data_sources/chinimandi_wholesale_
+                           sugar_prices.csv with any new rows -- run automatically by
+                           daily_scan.py before the scan, since chinimandi.com has no API
+data_sources/             CSVs for commodities with no yfinance ticker (currently just
+                           domestic sugar wholesale prices, ~2,550 daily rows since 2018)
 build_chart_data.py       generates docs/chart_data.json (indexed price series + historical
                            trend-confirmation instances per pair) -- run by hand after
                            validated_pairs.json changes, not part of the daily job
@@ -101,9 +113,16 @@ build_site.py             renders data/*.json + chart_data.json into docs/index.
 site_template.html        the HTML/CSS shell build_site.py fills in
 data/                     one JSON file per day the scan has run (generated)
 docs/                     generated static site, served by GitHub Pages
-.github/workflows/daily.yml   the scheduled job (scan -> build site -> commit both)
+.github/workflows/daily.yml   the scheduled job (scrape -> scan -> build site -> commit)
 requirements.txt
 ```
+
+Commodities without a yfinance ticker (currently only domestic sugar) are
+special-cased via a `CUSTOM_PRICE_LOADERS` dict in both `daily_scan.py` and
+`build_chart_data.py` -- the `validated_pairs.json` key isn't a real ticker
+for these (e.g. `DOMESTIC_SUGAR_WHOLESALE`), and each has a corresponding
+loader function in `correlation_engine.py` (e.g.
+`load_domestic_sugar_wholesale_price()`) instead of a yfinance fetch.
 
 After changing validated_pairs.json (adding/removing a pair, or changing a
 `trend_direction` override), regenerate the charts before rebuilding the site:
@@ -117,13 +136,17 @@ python3 build_chart_data.py && python3 build_site.py
 ```bash
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
+playwright install chromium   # needed once, for the sugar scraper
 python3 daily_scan.py
 ```
 
 To test/validate a new commodity or candidate stock, use
 `correlation_engine.analyze_commodity(commodity_ticker, stock_tickers,
-market_ticker="^NSEI")` directly -- see the git history for example
-invocations against sugar, copper, oil, silver, gold, aluminium, and iron ore.
+market_ticker="^NSEI")` directly (pass a pre-built `pd.Series` as
+`commodity_price` instead of a ticker for a non-yfinance source, as
+`build_chart_data.py` does for sugar) -- see the git history for example
+invocations against sugar, copper, oil, silver, gold, aluminium, natural
+gas, palm oil, and iron ore.
 
 ## Known limitations
 
@@ -135,6 +158,16 @@ invocations against sugar, copper, oil, silver, gold, aluminium, and iron ore.
 - `yfinance` is unofficial (scrapes Yahoo Finance) -- no SLA, could break.
 - The commodity benchmark has to be the right proxy for the equity side;
   global futures prices work well for internationally-priced commodities
-  (oil, copper, silver) but not for ones dominated by domestic policy
-  (sugar) or a different demand driver than the traded contract reflects
-  (iron ore, arguably needs China demand rather than the Singapore contract).
+  (oil, copper, silver) but not for ones dominated by domestic policy or a
+  different demand driver than the traded contract reflects (iron ore,
+  arguably needs China demand rather than the Singapore contract; natural
+  gas, needs Asian LNG/JKM rather than Henry Hub).
+- `scrape_domestic_sugar.py` is even more fragile than yfinance: chinimandi.com
+  has no public API, no terms-of-service statement covering programmatic
+  access was found, and the scraper depends on the exact DataTable structure
+  of one specific page (`#supsystic-table-6`) staying stable. It only reads
+  the default-rendered ~30 most recent rows (a deliberate choice to avoid
+  hammering the site daily with a full-history pull) and is idempotent, so a
+  few missed days catch up automatically -- but a longer outage or a site
+  redesign would need a fix, and this is the one data source in the whole
+  project not fetched via a purpose-built API.
