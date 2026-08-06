@@ -1,0 +1,58 @@
+{
+  "BZ=F": {
+    "name": "Brent Crude",
+    "market": "^NSEI",
+    "pairs": [
+      {"ticker": "OIL.NS", "name": "Oil India", "role": "upstream producer", "expected_direction": "positive", "tier": "validated",
+       "backtest": {"idio_correlation_r": 0.40, "fdr_significant": true, "trend_90d_excess_median_pct": 17.76, "trend_90d_hit_rate": 0.54}},
+      {"ticker": "ONGC.NS", "name": "ONGC", "role": "upstream producer", "expected_direction": "positive", "tier": "validated",
+       "backtest": {"idio_correlation_r": 0.43, "fdr_significant": true}},
+      {"ticker": "HINDPETRO.NS", "name": "HPCL", "role": "OMC (under-recovery risk on rising crude)", "expected_direction": "negative", "tier": "validated",
+       "backtest": {"idio_correlation_r": -0.43, "fdr_significant": true}},
+      {"ticker": "BPCL.NS", "name": "BPCL", "role": "OMC (under-recovery risk on rising crude)", "expected_direction": "negative", "tier": "validated",
+       "backtest": {"idio_correlation_r": -0.35, "fdr_significant": true}},
+      {"ticker": "IOC.NS", "name": "Indian Oil Corp", "role": "OMC (under-recovery risk on rising crude)", "expected_direction": "negative", "tier": "validated",
+       "backtest": {"idio_correlation_r": -0.34, "fdr_significant": true}},
+      {"ticker": "ASIANPAINT.NS", "name": "Asian Paints", "role": "consumer (crude-derivative input cost)", "expected_direction": "negative", "tier": "validated",
+       "backtest": {"idio_correlation_r": -0.32, "fdr_significant": true}},
+      {"ticker": "INDIGO.NS", "name": "IndiGo", "role": "consumer (jet fuel cost) -- short/medium horizon signs diverge", "expected_direction": "negative_shortterm", "tier": "validated_mixed",
+       "backtest": {"idio_correlation_r": -0.51, "fdr_significant": true, "trend_90d_excess_median_pct": 11.94, "note": "reacts negatively same-day but shows positive 90d trend-continuation -- treat as two separate signals, not one"}}
+    ]
+  },
+  "HG=F": {
+    "name": "Copper",
+    "market": "^NSEI",
+    "pairs": [
+      {"ticker": "POLYCAB.NS", "name": "Polycab India", "role": "cable/wire manufacturer -- demand co-mover, not simple cost-consumer", "expected_direction": "positive", "tier": "validated",
+       "backtest": {"trend_90d_excess_median_pct": 21.70, "trend_90d_hit_rate": 0.70, "note": "raw idio correlation weak/non-significant; the real signal is in trend-continuation, confirmed after stripping market beta from forward returns"}},
+      {"ticker": "KEI.NS", "name": "KEI Industries", "role": "cable/wire manufacturer -- demand co-mover", "expected_direction": "positive", "tier": "validated",
+       "backtest": {"trend_90d_excess_median_pct": 21.09, "trend_90d_hit_rate": 0.50}}
+    ]
+  },
+  "SI=F": {
+    "name": "Silver",
+    "market": "^NSEI",
+    "pairs": [
+      {"ticker": "HINDZINC.NS", "name": "Hindustan Zinc", "role": "producer (silver byproduct of zinc/lead mining)", "expected_direction": "positive", "tier": "validated",
+       "backtest": {"idio_correlation_r": 0.51, "fdr_significant": true, "trend_90d_excess_median_pct": 12.36, "trend_90d_hit_rate": 0.45}}
+    ]
+  },
+  "GC=F": {
+    "name": "Gold",
+    "market": "^NSEI",
+    "pairs": [
+      {"ticker": "MUTHOOTFIN.NS", "name": "Muthoot Finance", "role": "gold-loan NBFC (collateral value tailwind)", "expected_direction": "positive", "tier": "promising",
+       "backtest": {"idio_correlation_r": 0.21, "fdr_significant": false, "trend_90d_excess_median_pct": 10.25, "trend_90d_hit_rate": 0.42, "note": "correlation not yet statistically significant -- pattern is fundamentally coherent but needs more data/confirmation"}},
+      {"ticker": "MANAPPURAM.NS", "name": "Manappuram Finance", "role": "gold-loan NBFC (collateral value tailwind)", "expected_direction": "positive", "tier": "promising",
+       "backtest": {"idio_correlation_r": 0.19, "fdr_significant": false, "trend_90d_excess_median_pct": 12.84, "trend_90d_hit_rate": 0.42}},
+      {"ticker": "KALYANKJIL.NS", "name": "Kalyan Jewellers", "role": "jewellery retail (demand elasticity headwind)", "expected_direction": "negative", "tier": "promising",
+       "backtest": {"idio_correlation_r": 0.11, "fdr_significant": false, "trend_90d_excess_median_pct": -12.07, "note": "short history since 2021 IPO, fewer data points than other pairs"}}
+    ]
+  },
+  "_not_included": {
+    "note": "Commodities tested but not added to the live scan universe -- either no validated pair was found, or the global benchmark used was found to be the wrong proxy for the Indian equity side.",
+    "SB=F_sugar": "No FDR-significant correlation found for any candidate against global ICE sugar futures. Trend-continuation was uniformly negative even after market-beta correction, likely because Indian sugar equities are driven by domestic policy (FRP/SAP cane pricing, ethanol mandates, export quotas) rather than the global benchmark. Needs a domestic Indian sugar price series (NCDEX/Agmarknet) to retest properly.",
+    "ALI=F_aluminium": "No candidate cleared FDR significance. One trend-continuation number (NATIONALUM.NS) looked attractive but had no correlation backing and rests on ~13-15 non-independent events -- treated as noise, not a validated signal.",
+    "TIO=F_iron_ore": "No candidate cleared FDR significance. Iron ore/steel is more plausibly driven by China demand and domestic capacity cycles than this specific (thinly-traded) Singapore Exchange contract. Needs a China-demand-linked or domestic steel price series to retest properly."
+  }
+}

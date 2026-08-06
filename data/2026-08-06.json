@@ -1,0 +1,61 @@
+{
+  "run_date": "2026-08-06",
+  "commodities": {
+    "BZ=F": {
+      "name": "Brent Crude",
+      "status": {
+        "date": "2026-08-06",
+        "latest_price": 79.41000366210938,
+        "latest_return_pct": -0.05,
+        "z_score": -0.01,
+        "event_today": false,
+        "trend_cum_return_pct": -23.8,
+        "trend_drawdown_pct": 29.16,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "HG=F": {
+      "name": "Copper",
+      "status": {
+        "date": "2026-08-06",
+        "latest_price": 6.7835001945495605,
+        "latest_return_pct": 1.19,
+        "z_score": 0.7,
+        "event_today": false,
+        "trend_cum_return_pct": 5.77,
+        "trend_drawdown_pct": 0.0,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "SI=F": {
+      "name": "Silver",
+      "status": {
+        "date": "2026-08-06",
+        "latest_price": 62.21500015258789,
+        "latest_return_pct": 0.19,
+        "z_score": 0.06,
+        "event_today": false,
+        "trend_cum_return_pct": -27.22,
+        "trend_drawdown_pct": 30.01,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "GC=F": {
+      "name": "Gold",
+      "status": {
+        "date": "2026-08-06",
+        "latest_price": 4335.2001953125,
+        "latest_return_pct": 2.08,
+        "z_score": 1.31,
+        "event_today": false,
+        "trend_cum_return_pct": -8.13,
+        "trend_drawdown_pct": 7.72,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    }
+  }
+}
