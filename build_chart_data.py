@@ -53,11 +53,26 @@ def build_pair_chart(commodity_ticker, commodity_name, stock_ticker, stock_name,
 
     trend = trend_continuation_study(commodity_price, stock_price, market_price,
                                       expected_direction=trend_direction)
-    instances_90d = trend["by_horizon"].get(90, {}).get("instances", [])
-    instances = [
-        {"date": i["confirmation_date"], "excess_pct": i["excess_return_pct"], "hit": i["reached_target"]}
-        for i in instances_90d
-    ]
+
+    # Merge all three horizons into one row per confirmation date -- a
+    # recent confirmation may have 30d/60d data but not 90d yet, so each
+    # horizon is filled in independently rather than requiring all three.
+    instances_by_date = {}
+    for h in (30, 60, 90):
+        for inst in trend["by_horizon"].get(h, {}).get("instances", []):
+            row = instances_by_date.setdefault(inst["confirmation_date"], {"date": inst["confirmation_date"]})
+            row[f"excess_pct_{h}d"] = inst["excess_return_pct"]
+            row[f"hit_{h}d"] = inst["reached_target"]
+    # "excess_pct"/"hit" (no suffix) drive the chart markers -- 90d is the
+    # primary horizon this project validates against; fall back to 60d/30d
+    # only for a confirmation too recent to have 90d data yet.
+    for row in instances_by_date.values():
+        for h in (90, 60, 30):
+            if f"excess_pct_{h}d" in row:
+                row["excess_pct"] = row[f"excess_pct_{h}d"]
+                row["hit"] = row[f"hit_{h}d"]
+                break
+    instances = sorted(instances_by_date.values(), key=lambda i: i["date"], reverse=True)
 
     return {
         "commodity_ticker": commodity_ticker,

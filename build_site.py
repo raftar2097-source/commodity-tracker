@@ -208,24 +208,30 @@ def render_chart_svg(pair):
     </svg>"""
 
 
+def render_horizon_cell(inst, horizon):
+    excess = inst.get(f"excess_pct_{horizon}d")
+    if excess is None:
+        return '<td class="num instance-pending">— pending</td>'
+    hit = inst[f"hit_{horizon}d"]
+    cls = "hit" if hit else "miss"
+    symbol = "✓" if hit else "✗"
+    sign = "+" if excess > 0 else ""
+    return f'<td class="num instance-result {cls}">{sign}{excess}% {symbol}</td>'
+
+
 def render_instances_table(instances):
     if not instances:
         return '<p class="empty-state">No confirmed trend instances in the backtest window.</p>'
     rows = []
     for inst in sorted(instances, key=lambda i: i["date"], reverse=True):
-        cls = "hit" if inst["hit"] else "miss"
-        symbol = "✓" if inst["hit"] else "✗"
-        sign = "+" if inst["excess_pct"] > 0 else ""
-        rows.append(
-            f'<tr><td>{html.escape(inst["date"])}</td>'
-            f'<td class="num">{sign}{inst["excess_pct"]}%</td>'
-            f'<td class="instance-result {cls}">{symbol} {"hit" if inst["hit"] else "miss"}</td></tr>'
-        )
+        cells = "".join(render_horizon_cell(inst, h) for h in (30, 60, 90))
+        rows.append(f'<tr><td>{html.escape(inst["date"])}</td>{cells}</tr>')
     return f"""
     <table class="instances-table">
-      <thead><tr><th>Trend confirmed</th><th>90d excess return</th><th>vs. 15% target</th></tr></thead>
+      <thead><tr><th>Trend confirmed</th><th>30d excess</th><th>60d excess</th><th>90d excess</th></tr></thead>
       <tbody>{''.join(rows)}</tbody>
-    </table>"""
+    </table>
+    <p class="instances-note">Excess return over the Nifty from the confirmation date; ✓/✗ is vs. the 15% target used for this pair's hit rate. "— pending" means that horizon hasn't elapsed yet for a recent confirmation.</p>"""
 
 
 def render_track_pair(pair_meta, chart_data):
