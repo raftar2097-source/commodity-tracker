@@ -6,6 +6,7 @@ statistically-validated relationship to them -- both short-horizon
 enters a sustained trend, does a late entrant still capture a meaningful
 move over the following quarter).
 
+**Live UI:** https://raftar2097-source.github.io/commodity-tracker/
 **Runs:** daily at 07:00 IST, Mon-Fri, via GitHub Actions (before NSE open)
 **Cost:** $0/month -- yfinance needs no API key, GitHub Actions free tier covers the rest
 
@@ -93,8 +94,11 @@ domestic price series instead of the thin Singapore contract used here).
 correlation_engine.py    the backtest engine (correlation, reaction, trend-continuation)
 validated_pairs.json     curated output of the backtest -- what daily_scan.py reads
 daily_scan.py             daily entrypoint: checks today's data, writes data/<date>.json
+build_site.py             renders data/*.json into docs/index.html
+site_template.html        the HTML/CSS shell build_site.py fills in
 data/                     one JSON file per day the scan has run (generated)
-.github/workflows/daily.yml   the scheduled job
+docs/                     generated static site, served by GitHub Pages
+.github/workflows/daily.yml   the scheduled job (scan -> build site -> commit both)
 requirements.txt
 ```
 

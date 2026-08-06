@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commodity Tracker</title>
+<style>
+  :root {
+    --ground: #E7EBE8;
+    --surface: #F7F8F6;
+    --surface-raised: #FFFFFF;
+    --ink: #1A211D;
+    --ink-soft: #57625B;
+    --ink-faint: #8A948C;
+    --rule: #CBD3CD;
+    --rule-strong: #A9B3AC;
+    --accent: #33488F;
+    --accent-soft: #33488F14;
+    --bull: #2E7D4F;
+    --bull-bg: #2E7D4F14;
+    --bear: #AD3B3B;
+    --bear-bg: #AD3B3B14;
+    --neutral: #96771F;
+    --neutral-bg: #96771F14;
+    --shadow: 0 1px 2px rgba(20, 24, 22, 0.06), 0 4px 14px rgba(20, 24, 22, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #12161A; --surface: #191E22; --surface-raised: #1F252A;
+      --ink: #E7EAE6; --ink-soft: #9BA6A0; --ink-faint: #666F6A;
+      --rule: #2A3138; --rule-strong: #3A434B; --accent: #8CA2EE; --accent-soft: #8CA2EE1A;
+      --bull: #5CB584; --bull-bg: #5CB58420; --bear: #E08080; --bear-bg: #E0808020;
+      --neutral: #D6B463; --neutral-bg: #D6B46320;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 960px; margin: 0 auto; padding: 40px 24px 96px; }
+  .masthead {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+    padding-bottom: 20px; border-bottom: 2px solid var(--rule-strong); flex-wrap: wrap;
+  }
+  .wordmark {
+    font-family: ui-serif, Georgia, "Iowan Old Style", serif; font-size: 30px; font-weight: 600;
+    letter-spacing: -0.01em; margin: 0; text-wrap: balance;
+  }
+  .wordmark span { color: var(--accent); }
+  .masthead-meta {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px;
+    color: var(--ink-faint); text-align: right; line-height: 1.6;
+  }
+  .stats {
+    display: flex; gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+    margin-top: 20px; border-radius: 6px; overflow: hidden;
+  }
+  .stat { flex: 1; background: var(--surface); padding: 14px 18px; }
+  .stat-value {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-variant-numeric: tabular-nums;
+    font-size: 22px; font-weight: 600;
+  }
+  .stat-label {
+    font-size: 11.5px; color: var(--ink-soft); text-transform: uppercase;
+    letter-spacing: 0.06em; margin-top: 3px;
+  }
+  .section-label {
+    display: flex; align-items: center; gap: 10px; margin: 36px 0 14px;
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft);
+  }
+  .section-label::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+
+  /* day sections */
+  .day {
+    background: var(--surface-raised); border: 1px solid var(--rule); border-radius: 8px;
+    box-shadow: var(--shadow); margin-bottom: 14px; overflow: hidden;
+  }
+  .day.signal-day { border-color: var(--accent); }
+  .day > summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px;
+    padding: 14px 20px; user-select: none;
+  }
+  .day > summary::-webkit-details-marker { display: none; }
+  .day > summary::before {
+    content: "▸"; color: var(--ink-faint); font-size: 12px; transition: transform 0.15s ease;
+  }
+  .day[open] > summary::before { transform: rotate(90deg); }
+  .day-date {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 14px; font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .day-badge {
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 3px 9px; border-radius: 100px;
+  }
+  .day-badge.signal { color: var(--accent); background: var(--accent-soft); }
+  .day-badge.quiet { color: var(--ink-faint); background: var(--surface); }
+
+  .commodities-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;
+    padding: 0 20px 18px;
+  }
+  .commodity {
+    border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; background: var(--surface);
+  }
+  .commodity.active { border-color: var(--accent); background: var(--accent-soft); }
+  .commodity-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .commodity-title { display: flex; flex-direction: column; gap: 2px; }
+  .commodity-name { font-weight: 600; font-size: 14.5px; }
+  .commodity-ticker {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px; color: var(--ink-faint);
+  }
+  .commodity-price { text-align: right; }
+  .price {
+    display: block; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .move { font-size: 12px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .move.up { color: var(--bull); }
+  .move.down { color: var(--bear); }
+
+  .flags { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .flag-chip {
+    font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 100px;
+    text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  .flag-chip.event { color: var(--bear); background: var(--bear-bg); }
+  .flag-chip.trend { color: var(--accent); background: var(--accent-soft); }
+  .flag-chip.quiet { color: var(--ink-faint); background: var(--surface-raised); }
+
+  .signals { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .signal {
+    border-top: 1px dashed var(--rule); padding-top: 8px; font-size: 12.5px;
+  }
+  .signal-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .signal-name { font-weight: 600; }
+  .signal-ticker {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px; color: var(--ink-faint);
+  }
+  .dir-chip, .tier-chip {
+    font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 100px; text-transform: uppercase;
+  }
+  .dir-chip.pos { color: var(--bull); background: var(--bull-bg); }
+  .dir-chip.neg { color: var(--bear); background: var(--bear-bg); }
+  .dir-chip.mixed { color: var(--neutral); background: var(--neutral-bg); }
+  .tier-chip.validated { color: var(--accent); background: var(--accent-soft); }
+  .tier-chip.promising { color: var(--neutral); background: var(--neutral-bg); }
+  .signal-role { color: var(--ink-soft); margin-top: 3px; }
+  .signal-backtest {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px; color: var(--ink-faint);
+    margin-top: 4px;
+  }
+  .sig-note { font-size: 11.5px; color: var(--ink-soft); font-style: italic; margin-top: 4px; }
+
+  .empty-state {
+    padding: 40px; text-align: center; color: var(--ink-faint);
+    border: 1px dashed var(--rule-strong); border-radius: 8px;
+  }
+  .colophon {
+    margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--rule);
+    font-size: 12px; color: var(--ink-faint); line-height: 1.6;
+  }
+  @media (max-width: 480px) {
+    .masthead { flex-direction: column; }
+    .masthead-meta { text-align: left; }
+    .stats { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <h1 class="wordmark">Commodity <span>Tracker</span></h1>
+    <div class="masthead-meta">
+      Global commodities → validated Indian stock pairs<br>
+      Scanned daily 07:00 IST, Mon–Fri
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-value">1</div>
+      <div class="stat-label">Days tracked</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">0 / 1</div>
+      <div class="stat-label">Days with a signal</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">4</div>
+      <div class="stat-label">Commodities tracked</div>
+    </div>
+  </div>
+
+  <div class="section-label">Latest scan</div>
+  
+    <details class="day quiet-day" open>
+      <summary>
+        <span class="day-date">2026-08-06</span>
+        <span class="day-badge quiet">quiet</span>
+      </summary>
+      <div class="commodities-grid">
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Brent Crude</span>
+          <span class="commodity-ticker">BZ=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">79.64</span>
+          <span class="move up">+0.24%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Copper</span>
+          <span class="commodity-ticker">HG=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">6.72</span>
+          <span class="move up">+0.33%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Silver</span>
+          <span class="commodity-ticker">SI=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">62.10</span>
+          <span class="move ">0.0%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Gold</span>
+          <span class="commodity-ticker">GC=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">4320.70</span>
+          <span class="move up">+1.75%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div></div>
+    </details>
+
+  <div class="section-label">History</div>
+  <p class="empty-state">No earlier history yet — check back tomorrow.</p>
+
+  <p class="colophon">
+    Auto-generated from data/*.json after every daily scan. A "signal" fires
+    when a commodity has either a same-day reaction event (a large move
+    relative to its recent volatility) or is inside a confirmed,
+    low-drawdown trend — both thresholds are the same ones used in the
+    historical backtest, whose stats are shown under each linked stock.
+    "Validated" pairs cleared market-beta-adjusted correlation, multi-window
+    stability, and FDR significance; "promising" pairs have a fundamentally
+    coherent story but haven't cleared statistical significance yet.
+  </p>
+</div>
+</body>
+</html>
