@@ -181,17 +181,16 @@
     font-family: ui-monospace, "SF Mono", Menlo, monospace;
   }
   .track-body { padding: 4px 16px 16px; }
-  .chart-legend { display: flex; gap: 16px; margin-bottom: 6px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-soft); }
-  .legend-swatch { width: 12px; height: 2px; border-radius: 1px; display: inline-block; }
-  .legend-swatch.chart-commodity { background: var(--accent); }
-  .legend-swatch.chart-stock { background: var(--series-stock); }
 
   .track-chart { width: 100%; height: auto; display: block; }
   .chart-baseline { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 3; }
   .chart-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
   .chart-line.chart-commodity { stroke: var(--accent); }
   .chart-line.chart-stock { stroke: var(--series-stock); }
+  .panel-label { font-size: 11px; font-weight: 600; }
+  .panel-label.chart-commodity { fill: var(--accent); }
+  .panel-label.chart-stock { fill: var(--series-stock); }
+  .instance-connector-bg { stroke: var(--rule); stroke-width: 1; }
   .chart-end-label {
     font-size: 11px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-weight: 600;
   }
@@ -275,10 +274,13 @@
     stability, and FDR significance; "promising" pairs have a fundamentally
     coherent story but haven't cleared statistical significance yet. The
     track record charts below index both prices to 100 at the start of the
-    window so they're comparable on one axis regardless of currency or
-    scale; each dot marks a historical trend-confirmation date, colored by
-    whether the stock's 90-day excess return over the Nifty went on to hit
-    the 15% target (hover a dot, or see the table under each chart, for the
+    window and plot each as its own panel (a stock's move is usually far
+    larger than the commodity's own, so forcing them onto one shared scale
+    would flatten the commodity line to near-nothing); the vertical lines
+    connect the two panels at each historical trend-confirmation date,
+    colored by whether the stock's 90-day excess return over the Nifty
+    went on to hit the 15% target (hover a dot, or see the table under
+    each chart, for the
     exact numbers).
   </p>
 </div>

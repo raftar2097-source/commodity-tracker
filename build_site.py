@@ -120,11 +120,17 @@ def load_chart_data():
 
 
 def render_chart_svg(pair):
-    """Two indexed (rebased to 100) price lines -- commodity vs stock -- on
-    one shared axis, with a marker on each historical trend-confirmation
-    date. One axis, not two: comparing a $/barrel price against a Rs stock
-    price only makes sense once both are expressed as % change from the
-    same start, which is what 'indexed' means here."""
+    """Small multiples: two stacked panels (commodity, stock) sharing a date
+    axis, each auto-scaled to its OWN y-range rather than one shared axis.
+    A commodity producer's stock typically moves far more than the
+    commodity itself (operating leverage) -- e.g. Brent might be up 20%
+    over 8 years while its linked producer is up 300%+. Forcing both onto
+    one linear axis makes the commodity line look flat; a dual-axis chart
+    (two y-scales on one plot) would fix the visual but make the lines'
+    crossing points meaningless, which is worse. Two independently-scaled
+    panels, aligned on the same x-axis, keep each series readable while
+    still showing whether they move together in time -- the vertical
+    marker lines spanning both panels are what carry that alignment."""
     dates = pair["dates"]
     commodity = pair["commodity_indexed"]
     stock = pair["stock_indexed"]
@@ -132,26 +138,34 @@ def render_chart_svg(pair):
     if n < 2:
         return '<p class="empty-state">Not enough data to chart.</p>'
 
-    width, height = 640, 190
-    pad_left, pad_top, pad_right, pad_bottom = 8, 14, 60, 22
+    width = 640
+    pad_left, pad_right = 8, 60
+    panel_h, panel_gap = 84, 16
+    label_h, bottom_pad = 16, 20
     plot_w = width - pad_left - pad_right
-    plot_h = height - pad_top - pad_bottom
-
-    all_vals = commodity + stock
-    y_min, y_max = min(all_vals), max(all_vals)
-    y_range = (y_max - y_min) or 1
-    y_pad = y_range * 0.08
-    y_min -= y_pad
-    y_max += y_pad
+    top_panel_top = label_h
+    bottom_panel_top = label_h + panel_h + panel_gap + label_h
+    height = bottom_panel_top + panel_h + bottom_pad
 
     def x_at(i):
         return pad_left + (i / (n - 1)) * plot_w
 
-    def y_at(v):
-        return pad_top + (1 - (v - y_min) / (y_max - y_min)) * plot_h
+    def make_y_scale(series, panel_top):
+        v_min, v_max = min(series), max(series)
+        v_range = (v_max - v_min) or 1
+        v_pad = v_range * 0.1
+        v_min -= v_pad
+        v_max += v_pad
 
-    def path_for(series):
-        return "M " + " L ".join(f"{x_at(i):.1f},{y_at(v):.1f}" for i, v in enumerate(series))
+        def y_at(v):
+            return panel_top + (1 - (v - v_min) / (v_max - v_min)) * panel_h
+        return y_at
+
+    y_commodity = make_y_scale(commodity, top_panel_top)
+    y_stock = make_y_scale(stock, bottom_panel_top)
+
+    def path_for(series, y_scale):
+        return "M " + " L ".join(f"{x_at(i):.1f},{y_scale(v):.1f}" for i, v in enumerate(series))
 
     start_date = date.fromisoformat(dates[0])
     end_date = date.fromisoformat(dates[-1])
@@ -166,26 +180,29 @@ def render_chart_svg(pair):
     for inst in pair["instances"]:
         mx = x_for_date(inst["date"])
         idx = min(max(round((mx - pad_left) / plot_w * (n - 1)), 0), n - 1)
-        my = y_at(commodity[idx])
         cls = "hit" if inst["hit"] else "miss"
         sign = "+" if inst["excess_pct"] > 0 else ""
         title = (f"Trend confirmed {inst['date']}: 90d excess return {sign}{inst['excess_pct']}% "
                   f"({'hit' if inst['hit'] else 'missed'} the 15% target)")
+        title_html = f"<title>{html.escape(title)}</title>"
         markers.append(
-            f'<circle class="instance-marker {cls}" cx="{mx:.1f}" cy="{my:.1f}" r="5">'
-            f'<title>{html.escape(title)}</title></circle>'
+            f'<circle class="instance-marker {cls}" cx="{mx:.1f}" cy="{y_commodity(commodity[idx]):.1f}" r="5">{title_html}</circle>'
+            f'<circle class="instance-marker {cls}" cx="{mx:.1f}" cy="{y_stock(stock[idx]):.1f}" r="5">{title_html}</circle>'
         )
 
-    baseline_y = y_at(100)
     return f"""
     <svg class="track-chart" viewBox="0 0 {width} {height}" role="img"
-         aria-label="{html.escape(pair['commodity_name'])} vs {html.escape(pair['stock_name'])}, indexed to 100 at {dates[0]}">
-      <line class="chart-baseline" x1="{pad_left}" y1="{baseline_y:.1f}" x2="{width - pad_right}" y2="{baseline_y:.1f}" />
-      <path class="chart-line chart-commodity" d="{path_for(commodity)}" />
-      <path class="chart-line chart-stock" d="{path_for(stock)}" />
+         aria-label="{html.escape(pair['commodity_name'])} vs {html.escape(pair['stock_name'])}, each indexed to 100 at {dates[0]}, shown as separate panels">
+      <text class="panel-label chart-commodity" x="{pad_left}" y="{top_panel_top - 5}">{html.escape(pair['commodity_name'])} (indexed)</text>
+      <text class="panel-label chart-stock" x="{pad_left}" y="{bottom_panel_top - 5}">{html.escape(pair['stock_name'])} (indexed)</text>
+      {''.join(f'<line class="instance-connector-bg" x1="{x_for_date(i["date"]):.1f}" y1="{top_panel_top:.1f}" x2="{x_for_date(i["date"]):.1f}" y2="{bottom_panel_top + panel_h:.1f}" />' for i in pair["instances"])}
+      <line class="chart-baseline" x1="{pad_left}" y1="{y_commodity(100):.1f}" x2="{width - pad_right}" y2="{y_commodity(100):.1f}" />
+      <line class="chart-baseline" x1="{pad_left}" y1="{y_stock(100):.1f}" x2="{width - pad_right}" y2="{y_stock(100):.1f}" />
+      <path class="chart-line chart-commodity" d="{path_for(commodity, y_commodity)}" />
+      <path class="chart-line chart-stock" d="{path_for(stock, y_stock)}" />
       {''.join(markers)}
-      <text class="chart-end-label chart-commodity" x="{width - pad_right + 6}" y="{y_at(commodity[-1]) + 4:.1f}">{commodity[-1]:.0f}</text>
-      <text class="chart-end-label chart-stock" x="{width - pad_right + 6}" y="{y_at(stock[-1]) + 4:.1f}">{stock[-1]:.0f}</text>
+      <text class="chart-end-label chart-commodity" x="{width - pad_right + 6}" y="{y_commodity(commodity[-1]) + 4:.1f}">{commodity[-1]:.0f}</text>
+      <text class="chart-end-label chart-stock" x="{width - pad_right + 6}" y="{y_stock(stock[-1]) + 4:.1f}">{stock[-1]:.0f}</text>
       <text class="chart-date-label" x="{pad_left}" y="{height - 6}">{dates[0]}</text>
       <text class="chart-date-label end" x="{width - pad_right}" y="{height - 6}" text-anchor="end">{dates[-1]}</text>
     </svg>"""
@@ -232,10 +249,6 @@ def render_track_pair(pair_meta, chart_data):
         <span class="track-hit-summary">{hit_summary}</span>
       </summary>
       <div class="track-body">
-        <div class="chart-legend">
-          <span class="legend-item"><span class="legend-swatch chart-commodity"></span>{html.escape(cd['commodity_name'])} (indexed)</span>
-          <span class="legend-item"><span class="legend-swatch chart-stock"></span>{html.escape(cd['stock_name'])} (indexed)</span>
-        </div>
         {render_chart_svg(cd)}
         {render_instances_table(cd['instances'])}
       </div>
