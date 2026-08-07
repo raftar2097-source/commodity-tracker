@@ -5,12 +5,12 @@
       "name": "Brent Crude",
       "status": {
         "date": "2026-08-07",
-        "latest_price": 83.69999694824219,
-        "latest_return_pct": 1.46,
-        "z_score": 0.4,
+        "latest_price": 83.6500015258789,
+        "latest_return_pct": 1.4,
+        "z_score": 0.39,
         "event_today": false,
-        "trend_cum_return_pct": -22.33,
-        "trend_drawdown_pct": 25.33,
+        "trend_cum_return_pct": -22.38,
+        "trend_drawdown_pct": 25.38,
         "in_confirmed_trend": false
       },
       "signals": []
@@ -19,11 +19,11 @@
       "name": "Copper",
       "status": {
         "date": "2026-08-07",
-        "latest_price": 6.732999801635742,
-        "latest_return_pct": 0.69,
-        "z_score": 0.4,
+        "latest_price": 6.740499973297119,
+        "latest_return_pct": 0.8,
+        "z_score": 0.47,
         "event_today": false,
-        "trend_cum_return_pct": 3.82,
+        "trend_cum_return_pct": 3.94,
         "trend_drawdown_pct": 0.0,
         "in_confirmed_trend": false
       },
@@ -33,12 +33,12 @@
       "name": "Silver",
       "status": {
         "date": "2026-08-07",
-        "latest_price": 62.53499984741211,
-        "latest_return_pct": 1.77,
-        "z_score": 0.58,
+        "latest_price": 62.90999984741211,
+        "latest_return_pct": 2.37,
+        "z_score": 0.78,
         "event_today": false,
-        "trend_cum_return_pct": -26.54,
-        "trend_drawdown_pct": 29.65,
+        "trend_cum_return_pct": -26.1,
+        "trend_drawdown_pct": 29.23,
         "in_confirmed_trend": false
       },
       "signals": []
@@ -47,12 +47,12 @@
       "name": "Gold",
       "status": {
         "date": "2026-08-07",
-        "latest_price": 4325.7998046875,
-        "latest_return_pct": 1.96,
-        "z_score": 1.24,
+        "latest_price": 4337.89990234375,
+        "latest_return_pct": 2.24,
+        "z_score": 1.41,
         "event_today": false,
-        "trend_cum_return_pct": -7.52,
-        "trend_drawdown_pct": 7.92,
+        "trend_cum_return_pct": -7.26,
+        "trend_drawdown_pct": 7.66,
         "in_confirmed_trend": false
       },
       "signals": []
