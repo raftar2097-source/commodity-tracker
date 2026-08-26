@@ -244,11 +244,11 @@
 
   <div class="stats">
     <div class="stat">
-      <div class="stat-value">14</div>
+      <div class="stat-value">15</div>
       <div class="stat-label">Days tracked</div>
     </div>
     <div class="stat">
-      <div class="stat-value">14 / 14</div>
+      <div class="stat-value">15 / 15</div>
       <div class="stat-label">Days with a signal</div>
     </div>
     <div class="stat">
@@ -258,6 +258,240 @@
   </div>
 
   <div class="section-label">Latest scan</div>
+  
+    <details class="day signal-day" open>
+      <summary>
+        <span class="day-date">2026-08-26</span>
+        <span class="day-badge signal">signal</span>
+      </summary>
+      <div class="commodities-grid">
+    <div class="commodity active">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Brent Crude</span>
+          <span class="commodity-ticker">BZ=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">85.43</span>
+          <span class="move down">-7.59%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip event">Reaction event (z=-2.1)</span></div>
+      <div class="signals">
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Oil India</span>
+          <span class="signal-ticker">OIL.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip validated">validated</span>
+        </div>
+        <div class="signal-role">upstream producer</div>
+        <div class="signal-backtest">idio correlation r: 0.4, fdr significant: True, trend 90d excess median pct: 17.76, trend 90d hit rate: 0.54</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">ONGC</span>
+          <span class="signal-ticker">ONGC.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip validated">validated</span>
+        </div>
+        <div class="signal-role">upstream producer</div>
+        <div class="signal-backtest">idio correlation r: 0.43, fdr significant: True</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">HPCL</span>
+          <span class="signal-ticker">HINDPETRO.NS</span>
+          <span class="dir-chip neg">negative</span>
+          <span class="tier-chip validated">validated</span>
+        </div>
+        <div class="signal-role">OMC (under-recovery risk on rising crude)</div>
+        <div class="signal-backtest">idio correlation r: -0.43, fdr significant: True</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">BPCL</span>
+          <span class="signal-ticker">BPCL.NS</span>
+          <span class="dir-chip neg">negative</span>
+          <span class="tier-chip validated">validated</span>
+        </div>
+        <div class="signal-role">OMC (under-recovery risk on rising crude)</div>
+        <div class="signal-backtest">idio correlation r: -0.35, fdr significant: True</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Indian Oil Corp</span>
+          <span class="signal-ticker">IOC.NS</span>
+          <span class="dir-chip neg">negative</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">OMC (under-recovery risk on rising crude)</div>
+        <div class="signal-backtest">idio correlation r: -0.34, fdr significant: False, p adj: 0.091</div>
+        <div class="sig-note">was FDR-significant (p_adj=0.048) when tested against 8 candidates; dropped just below the bar (p_adj=0.091) once the batch grew to 17 -- the FDR correction gets stricter as more stocks are tested. Same underlying number, more honest significance test. Downgraded from validated for consistency.</div>
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Asian Paints</span>
+          <span class="signal-ticker">ASIANPAINT.NS</span>
+          <span class="dir-chip neg">negative</span>
+          <span class="tier-chip validated">validated</span>
+        </div>
+        <div class="signal-role">consumer (crude-derivative input cost)</div>
+        <div class="signal-backtest">idio correlation r: -0.32, fdr significant: True</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Pidilite Industries</span>
+          <span class="signal-ticker">PIDILITIND.NS</span>
+          <span class="dir-chip neg">negative</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">consumer (adhesives, petrochemical input cost)</div>
+        <div class="signal-backtest">idio correlation r: -0.39, fdr significant: False, p adj: 0.091, trend 90d excess median pct: 0.28</div>
+        <div class="sig-note">correct sign, close to significance, but weak trend-continuation backing -- not as strong a case as Asian Paints</div>
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">IndiGo</span>
+          <span class="signal-ticker">INDIGO.NS</span>
+          <span class="dir-chip neg">negative shortterm</span>
+          <span class="tier-chip validated">validated mixed</span>
+        </div>
+        <div class="signal-role">consumer (jet fuel cost) -- short/medium horizon signs diverge</div>
+        <div class="signal-backtest">idio correlation r: -0.51, fdr significant: True, trend 90d excess median pct: 11.94</div>
+        <div class="sig-note">reacts negatively same-day but shows positive 90d trend-continuation -- treat as two separate signals, not one</div>
+      </div></div>
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Copper</span>
+          <span class="commodity-ticker">HG=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">6.74</span>
+          <span class="move up">+2.05%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Silver</span>
+          <span class="commodity-ticker">SI=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">69.55</span>
+          <span class="move up">+1.46%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Gold</span>
+          <span class="commodity-ticker">GC=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">4720.50</span>
+          <span class="move up">+1.7%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity active">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Domestic Sugar (Wholesale, Chinimandi)</span>
+          <span class="commodity-ticker">DOMESTIC_SUGAR_WHOLESALE</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">6144.44</span>
+          <span class="move down">-4.51%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip event">Reaction event (z=-2.62)</span></div>
+      <div class="signals">
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Triveni Engineering</span>
+          <span class="signal-ticker">TRIVENI.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">sugar producer (wholesale-price-linked)</div>
+        <div class="signal-backtest">idio correlation r: 0.248, fdr significant: False</div>
+        <div class="sig-note">best correlation of any sugar candidate tested (global or domestic) across this whole project. Trend-continuation has only n=2 usable historical episodes (2018-07-15, 2025-03-03; a 3rd confirmed 2026-07-27 but is too recent for forward-return data) -- too thin to trust magnitudes, but every one of the 6 positive-direction sugar stocks agreed on direction across both episodes, which is the more meaningful signal than any single stock&#x27;s number.</div>
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Shree Renuka Sugars</span>
+          <span class="signal-ticker">RENUKA.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">sugar producer (wholesale-price-linked)</div>
+        <div class="signal-backtest">idio correlation r: 0.156, fdr significant: False</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Balrampur Chini Mills</span>
+          <span class="signal-ticker">BALRAMCHIN.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">sugar producer (wholesale-price-linked)</div>
+        <div class="signal-backtest">idio correlation r: 0.151, fdr significant: False</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Dhampur Sugar Mills</span>
+          <span class="signal-ticker">DHAMPURSUG.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">sugar producer (wholesale-price-linked)</div>
+        <div class="signal-backtest">idio correlation r: 0.15, fdr significant: False</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Uttam Sugar Mills</span>
+          <span class="signal-ticker">UTTAMSUGAR.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">sugar producer (wholesale-price-linked)</div>
+        <div class="signal-backtest">idio correlation r: 0.146, fdr significant: False</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Dwarikesh Sugar Industries</span>
+          <span class="signal-ticker">DWARKESH.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">sugar producer (wholesale-price-linked)</div>
+        <div class="signal-backtest">idio correlation r: 0.109, fdr significant: False</div>
+        
+      </div></div>
+    </div></div>
+    </details>
+
+  <div class="section-label">History</div>
   
     <details class="day signal-day" open>
       <summary>
@@ -402,9 +636,6 @@
       </div></div>
     </div></div>
     </details>
-
-  <div class="section-label">History</div>
-  
     <details class="day signal-day" open>
       <summary>
         <span class="day-date">2026-08-24</span>
