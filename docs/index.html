@@ -244,11 +244,11 @@
 
   <div class="stats">
     <div class="stat">
-      <div class="stat-value">21</div>
+      <div class="stat-value">22</div>
       <div class="stat-label">Days tracked</div>
     </div>
     <div class="stat">
-      <div class="stat-value">15 / 21</div>
+      <div class="stat-value">16 / 22</div>
       <div class="stat-label">Days with a signal</div>
     </div>
     <div class="stat">
@@ -259,7 +259,120 @@
 
   <div class="section-label">Latest scan</div>
   
-    <details class="day quiet-day" open>
+    <details class="day signal-day" open>
+      <summary>
+        <span class="day-date">2026-09-04</span>
+        <span class="day-badge signal">signal</span>
+      </summary>
+      <div class="commodities-grid">
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Brent Crude</span>
+          <span class="commodity-ticker">BZ=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">95.51</span>
+          <span class="move down">-0.13%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Copper</span>
+          <span class="commodity-ticker">HG=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">6.66</span>
+          <span class="move up">+2.36%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Silver</span>
+          <span class="commodity-ticker">SI=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">67.26</span>
+          <span class="move up">+3.84%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity active">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Gold</span>
+          <span class="commodity-ticker">GC=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">4513.90</span>
+          <span class="move up">+3.32%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip event">Reaction event (z=2.02)</span></div>
+      <div class="signals">
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Muthoot Finance</span>
+          <span class="signal-ticker">MUTHOOTFIN.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">gold-loan NBFC (collateral value tailwind)</div>
+        <div class="signal-backtest">idio correlation r: 0.21, fdr significant: False, trend 90d excess median pct: 10.25, trend 90d hit rate: 0.42</div>
+        <div class="sig-note">correlation not yet statistically significant -- pattern is fundamentally coherent but needs more data/confirmation</div>
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Manappuram Finance</span>
+          <span class="signal-ticker">MANAPPURAM.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">gold-loan NBFC (collateral value tailwind)</div>
+        <div class="signal-backtest">idio correlation r: 0.19, fdr significant: False, trend 90d excess median pct: 12.84, trend 90d hit rate: 0.42</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Kalyan Jewellers</span>
+          <span class="signal-ticker">KALYANKJIL.NS</span>
+          <span class="dir-chip neg">negative</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">jewellery retail (demand elasticity headwind)</div>
+        <div class="signal-backtest">idio correlation r: 0.11, fdr significant: False, trend 90d excess median pct: -12.07</div>
+        <div class="sig-note">short history since 2021 IPO, fewer data points than other pairs. IMPORTANT: expanding the candidate list showed &#x27;jeweller&#x27; is not a uniform-direction category -- Thangamayil Jewellery (+17.1% median, 50% hit) and Senco Gold (+8.1% median, 42% hit) both show POSITIVE trend-continuation, contradicting this negative pattern. Not added to this file since the contradiction is unresolved, but the clean &#x27;NBFC positive / jeweller negative&#x27; story should be treated as provisional, not settled -- possibly a regional/scale effect (smaller, expansion-stage jewellers vs. large national retailers) rather than a uniform commodity-cost effect. Needs more investigation before trusting either direction strongly.</div>
+      </div></div>
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Domestic Sugar (Wholesale, Chinimandi)</span>
+          <span class="commodity-ticker">DOMESTIC_SUGAR_WHOLESALE</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">5472.22</span>
+          <span class="move down">-0.3%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div></div>
+    </details>
+
+  <div class="section-label">History</div>
+  
+    <details class="day quiet-day">
       <summary>
         <span class="day-date">2026-09-03</span>
         <span class="day-badge quiet">quiet</span>
@@ -336,9 +449,6 @@
       
     </div></div>
     </details>
-
-  <div class="section-label">History</div>
-  
     <details class="day quiet-day">
       <summary>
         <span class="day-date">2026-09-02</span>

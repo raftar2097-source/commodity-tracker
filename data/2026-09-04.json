@@ -1,0 +1,125 @@
+{
+  "run_date": "2026-09-04",
+  "commodities": {
+    "BZ=F": {
+      "name": "Brent Crude",
+      "status": {
+        "date": "2026-09-04",
+        "latest_price": 95.51000213623047,
+        "latest_return_pct": -0.13,
+        "z_score": -0.04,
+        "event_today": false,
+        "trend_cum_return_pct": 4.44,
+        "trend_drawdown_pct": 5.14,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "HG=F": {
+      "name": "Copper",
+      "status": {
+        "date": "2026-09-04",
+        "latest_price": 6.656000137329102,
+        "latest_return_pct": 2.36,
+        "z_score": 1.68,
+        "event_today": false,
+        "trend_cum_return_pct": 5.61,
+        "trend_drawdown_pct": 0.8,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "SI=F": {
+      "name": "Silver",
+      "status": {
+        "date": "2026-09-04",
+        "latest_price": 67.26000213623047,
+        "latest_return_pct": 3.84,
+        "z_score": 1.43,
+        "event_today": false,
+        "trend_cum_return_pct": 3.33,
+        "trend_drawdown_pct": 4.86,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "GC=F": {
+      "name": "Gold",
+      "status": {
+        "date": "2026-09-04",
+        "latest_price": 4513.89990234375,
+        "latest_return_pct": 3.32,
+        "z_score": 2.02,
+        "event_today": true,
+        "trend_cum_return_pct": 5.96,
+        "trend_drawdown_pct": 2.73,
+        "in_confirmed_trend": false
+      },
+      "signals": [
+        {
+          "ticker": "MUTHOOTFIN.NS",
+          "name": "Muthoot Finance",
+          "role": "gold-loan NBFC (collateral value tailwind)",
+          "expected_direction": "positive",
+          "tier": "promising",
+          "backtest": {
+            "idio_correlation_r": 0.21,
+            "fdr_significant": false,
+            "trend_90d_excess_median_pct": 10.25,
+            "trend_90d_hit_rate": 0.42,
+            "note": "correlation not yet statistically significant -- pattern is fundamentally coherent but needs more data/confirmation"
+          },
+          "triggered_by": [
+            "reaction_event"
+          ]
+        },
+        {
+          "ticker": "MANAPPURAM.NS",
+          "name": "Manappuram Finance",
+          "role": "gold-loan NBFC (collateral value tailwind)",
+          "expected_direction": "positive",
+          "tier": "promising",
+          "backtest": {
+            "idio_correlation_r": 0.19,
+            "fdr_significant": false,
+            "trend_90d_excess_median_pct": 12.84,
+            "trend_90d_hit_rate": 0.42
+          },
+          "triggered_by": [
+            "reaction_event"
+          ]
+        },
+        {
+          "ticker": "KALYANKJIL.NS",
+          "name": "Kalyan Jewellers",
+          "role": "jewellery retail (demand elasticity headwind)",
+          "expected_direction": "negative",
+          "tier": "promising",
+          "backtest": {
+            "idio_correlation_r": 0.11,
+            "fdr_significant": false,
+            "trend_90d_excess_median_pct": -12.07,
+            "note": "short history since 2021 IPO, fewer data points than other pairs. IMPORTANT: expanding the candidate list showed 'jeweller' is not a uniform-direction category -- Thangamayil Jewellery (+17.1% median, 50% hit) and Senco Gold (+8.1% median, 42% hit) both show POSITIVE trend-continuation, contradicting this negative pattern. Not added to this file since the contradiction is unresolved, but the clean 'NBFC positive / jeweller negative' story should be treated as provisional, not settled -- possibly a regional/scale effect (smaller, expansion-stage jewellers vs. large national retailers) rather than a uniform commodity-cost effect. Needs more investigation before trusting either direction strongly."
+          },
+          "triggered_by": [
+            "reaction_event"
+          ]
+        }
+      ]
+    },
+    "DOMESTIC_SUGAR_WHOLESALE": {
+      "name": "Domestic Sugar (Wholesale, Chinimandi)",
+      "status": {
+        "date": "2026-09-03",
+        "latest_price": 5472.222222222223,
+        "latest_return_pct": -0.3,
+        "z_score": -0.16,
+        "event_today": false,
+        "trend_cum_return_pct": 23.65,
+        "trend_drawdown_pct": 18.76,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    }
+  }
+}
