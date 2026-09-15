@@ -1,0 +1,75 @@
+{
+  "run_date": "2026-09-15",
+  "commodities": {
+    "BZ=F": {
+      "name": "Brent Crude",
+      "status": {
+        "date": "2026-09-15",
+        "latest_price": 107.36000061035156,
+        "latest_return_pct": 1.58,
+        "z_score": 0.46,
+        "event_today": false,
+        "trend_cum_return_pct": 34.45,
+        "trend_drawdown_pct": 0.25,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "HG=F": {
+      "name": "Copper",
+      "status": {
+        "date": "2026-09-15",
+        "latest_price": 6.395500183105469,
+        "latest_return_pct": 1.03,
+        "z_score": 0.67,
+        "event_today": false,
+        "trend_cum_return_pct": 0.33,
+        "trend_drawdown_pct": 6.0,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "SI=F": {
+      "name": "Silver",
+      "status": {
+        "date": "2026-09-15",
+        "latest_price": 63.720001220703125,
+        "latest_return_pct": 0.33,
+        "z_score": 0.13,
+        "event_today": false,
+        "trend_cum_return_pct": -3.83,
+        "trend_drawdown_pct": 8.27,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "GC=F": {
+      "name": "Gold",
+      "status": {
+        "date": "2026-09-15",
+        "latest_price": 4330.89990234375,
+        "latest_return_pct": -0.48,
+        "z_score": -0.33,
+        "event_today": false,
+        "trend_cum_return_pct": 2.53,
+        "trend_drawdown_pct": 6.68,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "DOMESTIC_SUGAR_WHOLESALE": {
+      "name": "Domestic Sugar (Wholesale, Chinimandi)",
+      "status": {
+        "date": "2026-09-12",
+        "latest_price": 5147.777777777777,
+        "latest_return_pct": -0.22,
+        "z_score": -0.1,
+        "event_today": false,
+        "trend_cum_return_pct": 13.44,
+        "trend_drawdown_pct": 23.57,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    }
+  }
+}
