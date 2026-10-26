@@ -1,0 +1,197 @@
+{
+  "run_date": "2026-10-26",
+  "commodities": {
+    "BZ=F": {
+      "name": "Brent Crude",
+      "status": {
+        "date": "2026-10-26",
+        "latest_price": 109.94000244140625,
+        "latest_return_pct": -5.98,
+        "z_score": -2.25,
+        "event_today": true,
+        "trend_cum_return_pct": 21.99,
+        "trend_drawdown_pct": 5.81,
+        "in_confirmed_trend": false
+      },
+      "signals": [
+        {
+          "ticker": "OIL.NS",
+          "name": "Oil India",
+          "role": "upstream producer",
+          "expected_direction": "positive",
+          "tier": "validated",
+          "backtest": {
+            "idio_correlation_r": 0.4,
+            "fdr_significant": true,
+            "trend_90d_excess_median_pct": 17.76,
+            "trend_90d_hit_rate": 0.54
+          },
+          "triggered_by": [
+            "reaction_event"
+          ]
+        },
+        {
+          "ticker": "ONGC.NS",
+          "name": "ONGC",
+          "role": "upstream producer",
+          "expected_direction": "positive",
+          "tier": "validated",
+          "backtest": {
+            "idio_correlation_r": 0.43,
+            "fdr_significant": true
+          },
+          "triggered_by": [
+            "reaction_event"
+          ]
+        },
+        {
+          "ticker": "HINDPETRO.NS",
+          "name": "HPCL",
+          "role": "OMC (under-recovery risk on rising crude)",
+          "expected_direction": "negative",
+          "tier": "validated",
+          "backtest": {
+            "idio_correlation_r": -0.43,
+            "fdr_significant": true
+          },
+          "triggered_by": [
+            "reaction_event"
+          ]
+        },
+        {
+          "ticker": "BPCL.NS",
+          "name": "BPCL",
+          "role": "OMC (under-recovery risk on rising crude)",
+          "expected_direction": "negative",
+          "tier": "validated",
+          "backtest": {
+            "idio_correlation_r": -0.35,
+            "fdr_significant": true
+          },
+          "triggered_by": [
+            "reaction_event"
+          ]
+        },
+        {
+          "ticker": "IOC.NS",
+          "name": "Indian Oil Corp",
+          "role": "OMC (under-recovery risk on rising crude)",
+          "expected_direction": "negative",
+          "tier": "promising",
+          "backtest": {
+            "idio_correlation_r": -0.34,
+            "fdr_significant": false,
+            "p_adj": 0.091,
+            "note": "was FDR-significant (p_adj=0.048) when tested against 8 candidates; dropped just below the bar (p_adj=0.091) once the batch grew to 17 -- the FDR correction gets stricter as more stocks are tested. Same underlying number, more honest significance test. Downgraded from validated for consistency."
+          },
+          "triggered_by": [
+            "reaction_event"
+          ]
+        },
+        {
+          "ticker": "ASIANPAINT.NS",
+          "name": "Asian Paints",
+          "role": "consumer (crude-derivative input cost)",
+          "expected_direction": "negative",
+          "tier": "validated",
+          "backtest": {
+            "idio_correlation_r": -0.32,
+            "fdr_significant": true
+          },
+          "triggered_by": [
+            "reaction_event"
+          ]
+        },
+        {
+          "ticker": "PIDILITIND.NS",
+          "name": "Pidilite Industries",
+          "role": "consumer (adhesives, petrochemical input cost)",
+          "expected_direction": "negative",
+          "tier": "promising",
+          "backtest": {
+            "idio_correlation_r": -0.39,
+            "fdr_significant": false,
+            "p_adj": 0.091,
+            "trend_90d_excess_median_pct": 0.28,
+            "note": "correct sign, close to significance, but weak trend-continuation backing -- not as strong a case as Asian Paints"
+          },
+          "triggered_by": [
+            "reaction_event"
+          ]
+        },
+        {
+          "ticker": "INDIGO.NS",
+          "name": "IndiGo",
+          "role": "consumer (jet fuel cost) -- short/medium horizon signs diverge",
+          "expected_direction": "negative_shortterm",
+          "tier": "validated_mixed",
+          "backtest": {
+            "idio_correlation_r": -0.51,
+            "fdr_significant": true,
+            "trend_90d_excess_median_pct": 11.94,
+            "note": "reacts negatively same-day but shows positive 90d trend-continuation -- treat as two separate signals, not one"
+          },
+          "triggered_by": [
+            "reaction_event"
+          ]
+        }
+      ]
+    },
+    "HG=F": {
+      "name": "Copper",
+      "status": {
+        "date": "2026-10-26",
+        "latest_price": 6.492499828338623,
+        "latest_return_pct": 0.25,
+        "z_score": 0.19,
+        "event_today": false,
+        "trend_cum_return_pct": 0.88,
+        "trend_drawdown_pct": 4.57,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "SI=F": {
+      "name": "Silver",
+      "status": {
+        "date": "2026-10-26",
+        "latest_price": 53.994998931884766,
+        "latest_return_pct": 0.53,
+        "z_score": 0.23,
+        "event_today": false,
+        "trend_cum_return_pct": -6.24,
+        "trend_drawdown_pct": 22.27,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "GC=F": {
+      "name": "Gold",
+      "status": {
+        "date": "2026-10-26",
+        "latest_price": 4018.199951171875,
+        "latest_return_pct": 0.26,
+        "z_score": 0.19,
+        "event_today": false,
+        "trend_cum_return_pct": -2.16,
+        "trend_drawdown_pct": 14.47,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    },
+    "DOMESTIC_SUGAR_WHOLESALE": {
+      "name": "Domestic Sugar (Wholesale, Chinimandi)",
+      "status": {
+        "date": "2026-10-24",
+        "latest_price": 5643.333333333333,
+        "latest_return_pct": 3.1,
+        "z_score": 1.34,
+        "event_today": false,
+        "trend_cum_return_pct": 9.98,
+        "trend_drawdown_pct": 16.22,
+        "in_confirmed_trend": false
+      },
+      "signals": []
+    }
+  }
+}
