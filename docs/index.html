@@ -244,11 +244,11 @@
 
   <div class="stats">
     <div class="stat">
-      <div class="stat-value">61</div>
+      <div class="stat-value">62</div>
       <div class="stat-label">Days tracked</div>
     </div>
     <div class="stat">
-      <div class="stat-value">19 / 61</div>
+      <div class="stat-value">20 / 62</div>
       <div class="stat-label">Days with a signal</div>
     </div>
     <div class="stat">
@@ -259,7 +259,175 @@
 
   <div class="section-label">Latest scan</div>
   
-    <details class="day quiet-day" open>
+    <details class="day signal-day" open>
+      <summary>
+        <span class="day-date">2026-10-30</span>
+        <span class="day-badge signal">signal</span>
+      </summary>
+      <div class="commodities-grid">
+    <div class="commodity active">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Brent Crude</span>
+          <span class="commodity-ticker">BZ=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">112.58</span>
+          <span class="move down">-2.02%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip trend">Confirmed trend (36.48% cum.)</span></div>
+      <div class="signals">
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Oil India</span>
+          <span class="signal-ticker">OIL.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip validated">validated</span>
+        </div>
+        <div class="signal-role">upstream producer</div>
+        <div class="signal-backtest">idio correlation r: 0.4, fdr significant: True, trend 90d excess median pct: 17.76, trend 90d hit rate: 0.54</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">ONGC</span>
+          <span class="signal-ticker">ONGC.NS</span>
+          <span class="dir-chip pos">positive</span>
+          <span class="tier-chip validated">validated</span>
+        </div>
+        <div class="signal-role">upstream producer</div>
+        <div class="signal-backtest">idio correlation r: 0.43, fdr significant: True</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">HPCL</span>
+          <span class="signal-ticker">HINDPETRO.NS</span>
+          <span class="dir-chip neg">negative</span>
+          <span class="tier-chip validated">validated</span>
+        </div>
+        <div class="signal-role">OMC (under-recovery risk on rising crude)</div>
+        <div class="signal-backtest">idio correlation r: -0.43, fdr significant: True</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">BPCL</span>
+          <span class="signal-ticker">BPCL.NS</span>
+          <span class="dir-chip neg">negative</span>
+          <span class="tier-chip validated">validated</span>
+        </div>
+        <div class="signal-role">OMC (under-recovery risk on rising crude)</div>
+        <div class="signal-backtest">idio correlation r: -0.35, fdr significant: True</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Indian Oil Corp</span>
+          <span class="signal-ticker">IOC.NS</span>
+          <span class="dir-chip neg">negative</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">OMC (under-recovery risk on rising crude)</div>
+        <div class="signal-backtest">idio correlation r: -0.34, fdr significant: False, p adj: 0.091</div>
+        <div class="sig-note">was FDR-significant (p_adj=0.048) when tested against 8 candidates; dropped just below the bar (p_adj=0.091) once the batch grew to 17 -- the FDR correction gets stricter as more stocks are tested. Same underlying number, more honest significance test. Downgraded from validated for consistency.</div>
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Asian Paints</span>
+          <span class="signal-ticker">ASIANPAINT.NS</span>
+          <span class="dir-chip neg">negative</span>
+          <span class="tier-chip validated">validated</span>
+        </div>
+        <div class="signal-role">consumer (crude-derivative input cost)</div>
+        <div class="signal-backtest">idio correlation r: -0.32, fdr significant: True</div>
+        
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">Pidilite Industries</span>
+          <span class="signal-ticker">PIDILITIND.NS</span>
+          <span class="dir-chip neg">negative</span>
+          <span class="tier-chip promising">promising</span>
+        </div>
+        <div class="signal-role">consumer (adhesives, petrochemical input cost)</div>
+        <div class="signal-backtest">idio correlation r: -0.39, fdr significant: False, p adj: 0.091, trend 90d excess median pct: 0.28</div>
+        <div class="sig-note">correct sign, close to significance, but weak trend-continuation backing -- not as strong a case as Asian Paints</div>
+      </div>
+      <div class="signal">
+        <div class="signal-head">
+          <span class="signal-name">IndiGo</span>
+          <span class="signal-ticker">INDIGO.NS</span>
+          <span class="dir-chip neg">negative shortterm</span>
+          <span class="tier-chip validated">validated mixed</span>
+        </div>
+        <div class="signal-role">consumer (jet fuel cost) -- short/medium horizon signs diverge</div>
+        <div class="signal-backtest">idio correlation r: -0.51, fdr significant: True, trend 90d excess median pct: 11.94</div>
+        <div class="sig-note">reacts negatively same-day but shows positive 90d trend-continuation -- treat as two separate signals, not one</div>
+      </div></div>
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Copper</span>
+          <span class="commodity-ticker">HG=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">6.54</span>
+          <span class="move down">-0.6%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Silver</span>
+          <span class="commodity-ticker">SI=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">50.77</span>
+          <span class="move down">-2.76%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Gold</span>
+          <span class="commodity-ticker">GC=F</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">3994.80</span>
+          <span class="move down">-0.91%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div>
+    <div class="commodity quiet">
+      <div class="commodity-head">
+        <div class="commodity-title">
+          <span class="commodity-name">Domestic Sugar (Wholesale, Chinimandi)</span>
+          <span class="commodity-ticker">DOMESTIC_SUGAR_WHOLESALE</span>
+        </div>
+        <div class="commodity-price">
+          <span class="price">5771.11</span>
+          <span class="move down">-0.04%</span>
+        </div>
+      </div>
+      <div class="flags"><span class="flag-chip quiet">quiet</span></div>
+      
+    </div></div>
+    </details>
+
+  <div class="section-label">History</div>
+  
+    <details class="day quiet-day">
       <summary>
         <span class="day-date">2026-10-29</span>
         <span class="day-badge quiet">quiet</span>
@@ -336,9 +504,6 @@
       
     </div></div>
     </details>
-
-  <div class="section-label">History</div>
-  
     <details class="day quiet-day">
       <summary>
         <span class="day-date">2026-10-28</span>
